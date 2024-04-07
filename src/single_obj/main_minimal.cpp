@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
         cerr
         << "Usage: " << argv[0]
         << " <seed> <config-file> <maximum-running-time>"
-        << " <threads> <tsp-instance-file>"
+        << " <threads> <mode> <tsp-instance-file>"
         << endl;
         return 1;
     }
@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
 
         //cout << "Reading data..." << endl;
         auto instance = TSP_Instance(instance_file);
-        instance.distance_calc();
 
         ////////////////////////////////////////
         // Read algorithm parameters
