@@ -1,0 +1,6 @@
+./main_complete --config config.conf --seed 2700001 --stop_rule I     --stop_arg 1000 --maxtime 30 --threads 4 --instance ../../instances/brazil58.dat
+
+./main_minimal 2700001 config.conf 30 ../../instances/brazil58.dat
+
+
+./main_minimal 2700001 config.conf 1 1 0 ../../tspd_instances/uniform/uniform-1-n5.txt > ../../../fstsp_sol/rd400/no_initPop/2700001.sol

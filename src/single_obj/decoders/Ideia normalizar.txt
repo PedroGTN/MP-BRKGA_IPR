@@ -1,0 +1,2 @@
+Cada valor será colocado a uma distância igual, com o primeiro sendo 0 e o último sendo 1, e o meio sendo 0+(1/n *(i)).
+Para cada i, de 0 a n, será sorteado um número entre -1/2n e 1/2n, para ser somado a cada posição, fazendo com que não haja empates quando os cromossomos forem crusados
