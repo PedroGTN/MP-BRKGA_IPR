@@ -3,11 +3,11 @@ Using 1 threads for decoding
 method: rand_initPop
 seed: 7515072
 Instance: 1
-best_fitness: 1718.22
-current_iteration: 4959
-last_update_iteration: 4947
-current_time: 60.006s
-last_update_time: 59.8644s
+best_fitness: 1718.81
+current_iteration: 4842
+last_update_iteration: 4830
+current_time: 60.0021s
+last_update_time: 59.8633s
 largest_iteration_offset: 1669
 stalled_iterations: 12
 path_relink_time: 0s

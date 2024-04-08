@@ -4,12 +4,12 @@ method: rand_initPop
 seed: 2700001
 Instance: 1
 best_fitness: 2226.26
-current_iteration: 4970
+current_iteration: 4856
 last_update_iteration: 4013
-current_time: 60.0061s
-last_update_time: 48.6198s
+current_time: 60.0085s
+last_update_time: 49.4017s
 largest_iteration_offset: 342
-stalled_iterations: 957
+stalled_iterations: 843
 path_relink_time: 0s
 num_path_relink_calls: 0
 num_homogenities: 0

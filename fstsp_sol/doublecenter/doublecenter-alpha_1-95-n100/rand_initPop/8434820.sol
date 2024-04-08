@@ -6,8 +6,8 @@ Instance: 1
 best_fitness: 2902.34
 current_iteration: 4933
 last_update_iteration: 4929
-current_time: 60.0049s
-last_update_time: 59.9574s
+current_time: 60.0005s
+last_update_time: 59.9534s
 largest_iteration_offset: 391
 stalled_iterations: 4
 path_relink_time: 0s
