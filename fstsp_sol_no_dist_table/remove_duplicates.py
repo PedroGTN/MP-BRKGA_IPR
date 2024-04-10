@@ -3,7 +3,7 @@ new_table = open("n_table.csv", 'w')
 
 lines = old_table.readlines()
 
-new_table.write(lines[])
+new_table.write(lines[0])
 
 for l in lines[1:]:
     a = l.split('-')
