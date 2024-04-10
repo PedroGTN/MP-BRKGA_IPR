@@ -59,12 +59,12 @@ public:
     /// Return the distance between nodes i and j.
     double distance(unsigned i, unsigned j) const;
 
-    // void distance_calc();
+    void distance_calc();
 
 public:
     /// The speed of the Truck
     double truck_vel;
-    /// The speed of th Drone
+    /// The speed of the Drone
     double drone_vel;
     /// Number of nodes.
     unsigned num_nodes;

@@ -54,21 +54,16 @@ for f in instances_folders:
     for i in instances_file_list:    
         instance_path = instances_folder_especific + i
         num_nodes = instance_path.split('-')
-        if int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50:
-            #print("Numero instancias tipo " + f + " = " + str(len(instances_file_list)) + \
-            #    "\nNumero de seeds = " + str(len(seeds)))
+        if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50) and num_nodes[1][:5]!="alpha":
             sol_by_inst_path = sol_by_folder_path + '/' + i[:-4]
             if not os.path.exists(sol_by_inst_path):
                     os.mkdir(sol_by_inst_path)
             
-            print("Rodando instancia " + i[:-4])
             for m in methods[1:-1]:
                 sol_by_method_path = sol_by_inst_path + '/' + m[0]
                 
                 if not os.path.exists(sol_by_method_path):
                     os.mkdir(sol_by_method_path)
-
-                print("Usando metodo " + m[0])
 
                 for seed in seeds:
                     cleanseed = seed.strip()
