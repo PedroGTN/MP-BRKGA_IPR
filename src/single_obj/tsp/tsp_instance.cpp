@@ -70,7 +70,7 @@ TSP_Instance::TSP_Instance(const std::string& filename):
 
 double TSP_Instance::distance(unsigned i, unsigned j) const {
     // cout<<i<<" "<<j<<" ";
-    if(i==j) return 0;
+    // if(i==j) return 0;
     if(i<j) swap(i,j);
     // cout<<(((i)*(i-1))>>1)+j<<endl;
     return distances[(((i)*(i-1))>>1)+j];
