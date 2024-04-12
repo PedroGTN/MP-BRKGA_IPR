@@ -54,7 +54,7 @@ TSP_Instance::TSP_Instance(const std::string& filename):
         file >> num_nodes;
         //cout<<num_nodes<<endl;
         positions.resize(num_nodes*2);
-        distances.resize(((num_nodes)*(num_nodes-1))>>1);
+        distances.resize(pow(num_nodes,2));
         for(unsigned i = 0; i < positions.size(); ++i){
             file >> positions[i];
             //cout << positions[i] << endl;
@@ -71,9 +71,9 @@ TSP_Instance::TSP_Instance(const std::string& filename):
 double TSP_Instance::distance(unsigned i, unsigned j) const {
     // cout<<i<<" "<<j<<" ";
     // if(i==j) return 0;
-    if(i<j) swap(i,j);
+    // if(i<j) swap(i,j);
     // cout<<(((i)*(i-1))>>1)+j<<endl;
-    return distances[(((i)*(i-1))>>1)+j];
+    return distances[i*num_nodes + j];
 }
 
 // double TSP_Instance::distance(unsigned i, unsigned j) const {
@@ -89,8 +89,10 @@ void TSP_Instance::distance_calc(){
         // cout<<i<<": ";
         for(long unsigned j=0; j<i; j++){
             aux = pow((positions[i*2]-positions[j*2]),2);
-            aux += pow((positions[i*2 +1]-positions[j*2 +1]),2);
-            distances[(((i)*(i-1))>>1)+j] = sqrt(aux);
+            aux += pow((positions[i*2 + 1]-positions[j*2 + 1]),2);
+            aux = sqrt(aux);
+            distances[i*num_nodes + j] = aux;
+            distances[j*num_nodes + i] = aux;
             // cout<<distances[(((i)*(i-1))>>1)+j]<<" ";
         }
         // cout<<endl;
