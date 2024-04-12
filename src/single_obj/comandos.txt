@@ -3,4 +3,4 @@
 ./main_minimal 2700001 config.conf 30 ../../instances/brazil58.dat
 
 
-./main_minimal 2700001 config.conf 1 1 0 ../../tspd_instances/uniform/uniform-1-n5.txt > ../../../fstsp_sol/rd400/no_initPop/2700001.sol
+./main_minimal 2700001 config-basic.conf 10 1 0 ../../tspd_instances/doublecenter/doublecenter-71-n50.txt

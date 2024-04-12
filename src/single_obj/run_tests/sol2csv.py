@@ -2,7 +2,7 @@ import os
 
 #nome inst, num nodes, double/single/uniform, best_fitness, current_iteration, last_update_iteration, last_update_time, stalled_iterations, largest_iteration_offset
 
-os.chdir("../../../fstsp_sol_dist_table/")
+os.chdir("../../../fstsp_sol/")
 
 csv_file_name = "table.csv"
 
