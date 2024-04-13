@@ -68,20 +68,20 @@ TSP_Instance::TSP_Instance(const std::string& filename):
 
 //-------------------------------[ Distance ]---------------------------------//
 
-double TSP_Instance::distance(unsigned i, unsigned j) const {
-    // cout<<i<<" "<<j<<" ";
-    // if(i==j) return 0;
-    // if(i<j) swap(i,j);
-    // cout<<(((i)*(i-1))>>1)+j<<endl;
-    return distances[i*num_nodes + j];
-}
-
 // double TSP_Instance::distance(unsigned i, unsigned j) const {
-//     double aux;
-//     aux = pow((positions[i*2]-positions[j*2]),2);
-//     aux += pow((positions[i*2 +1]-positions[j*2 +1]),2);
-//     return sqrt(aux);
+//     // cout<<i<<" "<<j<<" ";
+//     // if(i==j) return 0;
+//     // if(i<j) swap(i,j);
+//     // cout<<(((i)*(i-1))>>1)+j<<endl;
+//     return distances[i*num_nodes + j];
 // }
+
+double TSP_Instance::distance(unsigned i, unsigned j) const {
+    double aux;
+    aux = pow((positions[i*2]-positions[j*2]),2);
+    aux += pow((positions[i*2 +1]-positions[j*2 +1]),2);
+    return sqrt(aux);
+}
 
 void TSP_Instance::distance_calc(){
     double aux;

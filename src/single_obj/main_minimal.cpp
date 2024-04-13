@@ -137,11 +137,20 @@ int main(int argc, char* argv[]) {
         }
 		
         } // end local scope
-		
-		
-		
 
         const auto final_status = algorithm.run(control_params, &cout);
+
+        vector<pair<double, unsigned>> tour(instance.num_nodes);
+        for(unsigned i = 0; i < instance.num_nodes; ++i)
+            tour[i] = make_pair(final_status.best_chromosome[i], i);;
+
+        sort(tour.begin(), tour.end());
+        cout << "\nBest tour: \n";
+
+        for(const auto& kv : tour)
+            cout << kv.second << " ";
+            
+        cout<<"\n";
 
         cout
         << "method: " << method_name[method]

@@ -1,15 +1,18 @@
-Custom stopping criteria not supplied by the user. Using max. time = 60s and max. stall_offset = 0
+Custom stopping criteria not supplied by the user. Using max. time = 10s and max. stall_offset = 0
 Using 1 threads for decoding
+
+Best tour: 
+12 29 17 16 34 33 37 22 0 7 39 21 27 46 4 41 40 11 31 26 15 18 6 13 25 43 9 2 38 20 5 32 1 49 47 45 35 28 19 24 3 42 36 14 8 23 30 44 48 10 
 method: rand_initPop
 seed: 297720
 Instance: 1
-best_fitness: 1035.08
-current_iteration: 7033
-last_update_iteration: 2250
-current_time: 60.0028s
-last_update_time: 19.6849s
-largest_iteration_offset: 1275
-stalled_iterations: 4783
+best_fitness: 1055.25
+current_iteration: 585
+last_update_iteration: 483
+current_time: 10.0154s
+last_update_time: 8.58603s
+largest_iteration_offset: 18
+stalled_iterations: 102
 path_relink_time: 0s
 num_path_relink_calls: 0
 num_homogenities: 0
