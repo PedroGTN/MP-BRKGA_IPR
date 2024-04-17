@@ -59,7 +59,7 @@ TSP_Instance::TSP_Instance(const std::string& filename):
             file >> positions[i];
             //cout << positions[i] << endl;
         }
-        distance_calc();
+        //distance_calc();
     }
     catch(std::ifstream::failure& e) {
         throw fstream::failure("Error reading the instance file");

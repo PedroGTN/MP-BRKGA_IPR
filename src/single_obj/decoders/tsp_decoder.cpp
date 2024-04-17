@@ -47,10 +47,10 @@ BRKGA::fitness_t TSP_Decoder::decode(Chromosome& chromosome,
 
 
 
-/* 	for(unsigned i = 0; i < instance.num_nodes; ++i)
-        cout<<chromosome[i]<<" ";
-	cout<<endl;
- */
+ 	// for(unsigned i = 0; i < instance.num_nodes; ++i)
+    //     cout<<chromosome[i]<<" ";
+	// cout<<endl<<endl;
+
     sort(permutation.begin()+1, permutation.end());
 
     double cost = instance.distance(permutation.front().second,

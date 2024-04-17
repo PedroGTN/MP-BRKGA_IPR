@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
         for(unsigned i = 0; i < instance.num_nodes; ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);;
 
-        sort(tour.begin(), tour.end());
+        sort(tour.begin()+1, tour.end());
         cout << "\nBest tour: \n";
 
         for(const auto& kv : tour)

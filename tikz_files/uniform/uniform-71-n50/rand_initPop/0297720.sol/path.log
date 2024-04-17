@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.7.24)  13 APR 2024 19:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.7.24)  17 APR 2024 17:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,7 +356,7 @@ File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count283
 \l__pdf_internal_box=\box63
 )
-No file path.aux.
+(./path.aux)
 \openout1 = `path.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -373,7 +373,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
-(c:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (c:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count284
 \scratchdimen=\dimen193
@@ -403,15 +403,15 @@ L3 programming layer <2023-06-30>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 12679 strings out of 475236
- 260402 string characters out of 5768534
+ 12682 strings out of 475236
+ 260441 string characters out of 5768534
  1941238 words of memory out of 5000000
- 33736 multiletter control sequences out of 15000+600000
+ 33737 multiletter control sequences out of 15000+600000
  558069 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,7n,121p,410b,594s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on path.pdf (1 page, 20786 bytes).
+Output written on path.pdf (1 page, 20782 bytes).
 PDF statistics:
  16 PDF objects out of 1000 (max. 8388607)
  10 compressed objects within 1 object stream
