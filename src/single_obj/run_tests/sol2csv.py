@@ -4,9 +4,9 @@ from sol2tikz import sol2tikz
 
 #nome inst, num nodes, double/single/uniform, best_fitness, current_iteration, last_update_iteration, last_update_time, stalled_iterations, largest_iteration_offset
 
-os.chdir("../../../fstsp_sol/")
+os.chdir("../../../tsp_sol/")
 sol_path = "../tspd_instances/"
-tikz_path = "../tikz_files/"
+tikz_path = "../tsp_tikz_files/"
 
 if not os.path.exists(tikz_path):
     os.mkdir(tikz_path)
