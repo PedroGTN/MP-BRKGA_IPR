@@ -26,8 +26,6 @@
 
 #include "tsp/tsp_instance.hpp"
 #include "decoders/tsp_decoder.hpp"
-#include "decoders/Tspdproblem.h"
-#include "decoders/Tspdsolver.h"
 #include "brkga_mp_ipr.hpp"
 #include "heuristics/greedy_tour.hpp"
 
@@ -66,7 +64,7 @@ int main(int argc, char* argv[]) {
         const string method_name[] = {"no_initPop", "rand_initPop", "def_initPop"};
 
         //cout << "Reading data..." << endl;
-        auto instance = Tspd_problem(instance_file);
+        auto instance = TSP_Instance(instance_file);
 
         ////////////////////////////////////////
         // Read algorithm parameters
@@ -86,9 +84,9 @@ int main(int argc, char* argv[]) {
 
         //cout << "Building BRKGA data and initializing..." << endl;
 
-        Tspd_solver decoder(instance);
+        TSP_Decoder decoder(instance);
 
-        BRKGA::BRKGA_MP_IPR<Tspd_solver> algorithm(
+        BRKGA::BRKGA_MP_IPR<TSP_Decoder> algorithm(
             decoder, BRKGA::Sense::MINIMIZE, seed,
             instance.num_nodes, brkga_params, num_threads
         );
@@ -142,8 +140,8 @@ int main(int argc, char* argv[]) {
 
         const auto final_status = algorithm.run(control_params, &cout);
 
-        vector<pair<double, unsigned>> tour(instance.getN());
-        for(unsigned i = 0; i < instance.getN(); ++i)
+        vector<pair<double, unsigned>> tour(instance.num_nodes);
+        for(unsigned i = 0; i < instance.num_nodes; ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);;
 
         sort(tour.begin()+1, tour.end());

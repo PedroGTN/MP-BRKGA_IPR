@@ -83,4 +83,5 @@ for f in instances_folders:
                         pool.map(execute, command_list)
                         command_list.clear()
 
-seeds_file.close
+seeds_file.close()
+

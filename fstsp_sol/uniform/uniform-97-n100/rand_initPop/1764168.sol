@@ -2,17 +2,17 @@ Custom stopping criteria not supplied by the user. Using max. time = 60s and max
 Using 1 threads for decoding
 
 Best tour: 
-22 92 73 89 12 19 55 53 52 28 99 33 56 81 84 74 54 72 38 90 30 66 4 39 43 63 95 35 32 7 96 29 94 10 1 46 69 60 5 86 9 71 91 61 48 26 40 50 58 51 37 31 78 97 93 83 15 36 80 57 68 17 67 34 76 47 59 88 75 20 65 79 3 14 98 8 42 62 24 13 64 11 0 16 77 6 41 70 45 25 18 87 49 2 85 27 82 21 44 23 
+0 23 22 92 21 79 51 75 77 45 70 80 83 15 93 97 78 69 37 94 10 1 46 31 60 36 57 85 11 88 4 66 49 87 18 25 6 41 43 86 20 5 65 58 95 71 91 9 68 63 16 2 39 30 90 38 72 54 74 84 59 47 17 64 67 34 99 33 56 81 76 13 61 50 27 82 35 3 7 32 96 29 14 98 12 55 19 53 62 52 28 24 48 26 42 40 8 73 89 44 
 method: rand_initPop
 seed: 1764168
 Instance: 1
-best_fitness: 1155.98
-current_iteration: 3793
-last_update_iteration: 3661
-current_time: 60.0096s
-last_update_time: 57.9658s
-largest_iteration_offset: 302
-stalled_iterations: 132
+best_fitness: 1120.45
+current_iteration: 3461
+last_update_iteration: 3429
+current_time: 60.0033s
+last_update_time: 59.3802s
+largest_iteration_offset: 313
+stalled_iterations: 32
 path_relink_time: 0s
 num_path_relink_calls: 0
 num_homogenities: 0

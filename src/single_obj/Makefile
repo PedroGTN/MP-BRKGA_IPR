@@ -68,6 +68,9 @@ OBJS = \
 	./tsp/tsp_instance.o \
 	./heuristics/greedy_tour.o \
 	./decoders/tsp_decoder.o \
+	./decoders/Tspdsolver.o \
+	./decoders/Tspdproblem.o \
+	./decoders/Digrafo.o \
 	./decoders/tsp_decoder_pre_allocating.o
 
 # Helpers.
@@ -77,6 +80,9 @@ UTIL_OBJS = \
 # Main files.
 MAIN_MINIMAL_OBJ = main_minimal.o
 MAIN_MINIMAL_EXE = main_minimal
+
+MAIN_MINIMAL_TSP_OBJ = main_minimal_tsp.o
+MAIN_MINIMAL_TSP_EXE = main_minimal_tsp
 
 MAIN_COMPLETE_OBJ = main_complete.o
 MAIN_COMPLETE_EXE = main_complete
@@ -132,11 +138,16 @@ CXXFLAGS = $(USER_FLAGS)
 .PHONY: all clean
 .SUFFIXES: .cpp .o
 
-all: main_minimal main_complete
+all: main_minimal main_complete main_minimal_tsp
 
 main_minimal: $(OBJS) $(MAIN_MINIMAL_OBJ)
 	@echo "--> Linking objects... "
 	$(CXX) $(CXXFLAGS) $(OBJS) $(MAIN_MINIMAL_OBJ) -o $(MAIN_MINIMAL_EXE)
+	@echo
+
+main_minimal_tsp: $(OBJS) $(MAIN_MINIMAL_TSP_OBJ)
+	@echo "--> Linking objects... "
+	$(CXX) $(CXXFLAGS) $(OBJS) $(MAIN_MINIMAL_TSP_OBJ) -o $(MAIN_MINIMAL_TSP_EXE)
 	@echo
 
 main_complete: $(UTIL_OBJS) $(OBJS) $(MAIN_COMPLETE_OBJ)

@@ -1,0 +1,1 @@
+python3 fstsp.py 60 1 && python3 tsp.py 60 1 

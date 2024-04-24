@@ -26,6 +26,7 @@
 #include "decoders/tsp_decoder.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 using namespace BRKGA;
@@ -44,27 +45,33 @@ BRKGA::fitness_t TSP_Decoder::decode(Chromosome& chromosome,
     for(unsigned i = 0; i < instance.num_nodes; ++i){
        permutation[i] = make_pair(chromosome[i], i);
     }
-
-
-
- 	// for(unsigned i = 0; i < instance.num_nodes; ++i)
-    //     cout<<chromosome[i]<<" ";
-	// cout<<endl<<endl;
-
     sort(permutation.begin()+1, permutation.end());
+
+    unsigned v_size = permutation.size();
+    unsigned border = ceil(v_size * 0.1);
+    double v_media = 0;
+
+    for(unsigned i = border; i<v_size - border; i++){
+        v_media += permutation[i].first/v_size;
+    }
+
+    for(unsigned i = 0; i<v_size; i++){
+        if(chromosome[i] >= v_media)
+            chromosome[i] = 0.5 + 0.49999999 *((chromosome[i] - v_media) / (1 - v_media));
+        else
+            chromosome[i] = 0.5 - 0.49999999 *((v_media - chromosome[i]) / (v_media));
+    }
 
     double cost = instance.distance(permutation.front().second,
                                      permutation.back().second); 
 
-    //cout<<"cost1: "<<cost<<endl;
-    //cout<<"order: ";
+
     for(unsigned i = 0; i < instance.num_nodes - 1; ++i){
         cost += instance.distance(permutation[i].second,
                                   permutation[i + 1].second);
-        //cout<<permutation[i].second<< " ";
     }
   
-    //cout<<" || cost of perm: "<<cost<<endl;
+
 
     return cost;
 }

@@ -1155,7 +1155,10 @@ readConfiguration(std::istream& input, std::ostream& logger = std::cout) {
         std::stringstream line_stream(line);
         line_stream >> token >> data;
 
-        std::transform(token.begin(), token.end(), token.begin(), tolower);
+        std::transform(token.begin(), token.end(), token.begin(),
+        [](unsigned char c){ return std::tolower(c); });
+
+        //std::transform(token.begin(), token.end(), token.begin(), tolower);
 
         if(auto it_token = token_map.find(token); it_token != token_map.end()) {
             if(it_token->second.supplied) {
