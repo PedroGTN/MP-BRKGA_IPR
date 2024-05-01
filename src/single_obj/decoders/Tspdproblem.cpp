@@ -17,8 +17,8 @@
 Tspd_problem::Tspd_problem(const std::string& filename) : 	truck_vel(0), 
 															drone_vel(0), 
 															num_nodes(0),
-															distances(),
-															positions()
+															positions(),
+															distances()
 {
 	ifstream file(filename, ios::in);
     if(!file){
@@ -44,28 +44,28 @@ Tspd_problem::Tspd_problem(const std::string& filename) : 	truck_vel(0),
         throw fstream::failure("Error reading the instance file");
     }
 
-	distances.resize(num_nodes);
-	for (unsigned u = 0; u < num_nodes; u++)
-	{
-		// o n+1-esimo eh uma copia do deposito
-		distances[u].resize(num_nodes + 1);
-	}
+	// distances.resize(num_nodes);
+	// for (unsigned u = 0; u < num_nodes; u++)
+	// {
+	// 	// o n+1-esimo eh uma copia do deposito
+	// 	distances[u].resize(num_nodes + 1);
+	// }
 
-	for (unsigned u = 0; u < num_nodes; u++)
-	{
-		for (unsigned v = 0; v <= u; v++)
-		{
-			double aux = sqrt(
-			pow((positions[u*2] - positions[v*2]), 2) +
-    		pow((positions[u*2 + 1] - positions[v*2 +1]), 2));
+	// for (unsigned u = 0; u < num_nodes; u++)
+	// {
+	// 	for (unsigned v = 0; v <= u; v++)
+	// 	{
+	// 		double aux = sqrt(
+	// 		pow((positions[u*2] - positions[v*2]), 2) +
+    // 		pow((positions[u*2 + 1] - positions[v*2 +1]), 2));
 
-			distances[u][v] = aux;
-			distances[v][u] = aux;
-		}
-		distances[u][num_nodes] = sqrt(
-			pow(positions[u*2] - positions[0], 2) +
-			pow(positions[u*2 + 1] - positions[1], 2));
-	}
+	// 		distances[u][v] = aux;
+	// 		distances[v][u] = aux;
+	// 	}
+	// 	distances[u][num_nodes] = sqrt(
+	// 		pow(positions[u*2] - positions[0], 2) +
+	// 		pow(positions[u*2 + 1] - positions[1], 2));
+	// }
 
 	// if (DEBUG >= 1)
 	// {
@@ -106,13 +106,13 @@ double Tspd_problem::getDist(int u, int v)
 {
 	// pré calcular as distancias entre cada par de vértices
 	// e usar a matriz distances[][] caso trabalhando com algoritmos populacionais
-	return distances[u][v];
+	// return distances[u][v];
 
-	// if (v == int(num_nodes))
-	// 	v = 0;
-	// return sqrt(
-	// 	pow(positions[u*2] - positions[v*2], 2) +
-	// 	pow(positions[u*2 + 1] - positions[v*2 + 1], 2));
+	if (v == int(num_nodes))
+		v = 0;
+	return sqrt(
+		pow(positions[u*2] - positions[v*2], 2) +
+		pow(positions[u*2 + 1] - positions[v*2 + 1], 2));
 }
 
 unsigned int Tspd_problem::getN() { return num_nodes; }

@@ -11,7 +11,7 @@ else:
     input = sys.argv[1]
 
 
-os.chdir("../../../fstsp_sol" + input + '/')
+os.chdir("../../../fstsp_sol_" + input + '/')
 sol_path = "../tspd_instances/"
 tikz_path = "../fstsp_" + input + "_tikz_files/"
 
@@ -25,7 +25,7 @@ csv_file = open(csv_file_name, 'w')
 sol_file_list = os.listdir()
 sol_file_list.remove(csv_file_name)
 
-csv_file.write("instance_name,num_nodes,instance_type,optimal_tsp_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n")
+csv_file.write("instance_name,num_nodes,instance_type,alpha,optimal_tsp_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n")
 
 num_list = [50, 100]
 
@@ -50,7 +50,10 @@ for inst_type in sol_file_list:
             instance_loc = sol_path + inst_type + '/' + i + '.txt'            
             num_nodes = i.split('-')
             if(int(num_nodes[-1][1:]) == num):
-                csv_file.write(i + ',' + num_nodes[-1][1:] + ',' + inst_type + ',')
+                alpha = '2'
+                if(i.split('-')[1][:-2] == 'alpha'):
+                    alpha = i.split('-')[1][-1]
+                csv_file.write(i + ',' + num_nodes[-1][1:] + ',' + inst_type + ',' + alpha + ',')
                 inst_folder = inst_type + '/' + i
                 mode_list = os.listdir(inst_folder)
                 optimal_solution = opt_sol(instance_loc, sol_file_loc)
