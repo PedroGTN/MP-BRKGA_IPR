@@ -7,11 +7,12 @@ from multiprocessing import Pool
 if len(sys.argv) == 2 and sys.argv[1] == "help":
     print("python3 run_brkga.py <max time> <num threads>" + \
     "\n<max time>: maximum instance running time" + \
-    "\n<num threads>: maximum threads for decoding in brkga")
+    "\n<num threads>: maximum threads for decoding in brkga" + \
+    "\n<suffix>: to be added to the end of the filenames")
     exit()
 
-if len(sys.argv) < 3:
-    print("python3 run_brkga.py <max time> <num threads>" + \
+if len(sys.argv) < 4:
+    print("python3 run_brkga.py <max time> <num threads> <suffix>" + \
     "\nuse \"python3 run_brkga.py help\" for more details")
     exit()
 
@@ -25,9 +26,9 @@ command_list = []
 pool = Pool(processes=3)
 
 exec_path = "../main_minimal"
-
+suffix = sys.argv[3]
 instances_path = "../../../tspd_instances/"
-tsp_solutions_path = "../../../fstsp_sol/"
+tsp_solutions_path = "../../../fstsp_sol" + suffix + '/'
 runtime = sys.argv[1]
 threads = sys.argv[2]
 methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]

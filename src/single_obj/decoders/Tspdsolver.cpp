@@ -191,3 +191,89 @@ double Tspd_solver::split_lazy(Tspd_problem &problem,
     cout << "Number of triples considered: " << triple_count << endl;
     return distances[n];
 }
+
+double Tspd_solver::split_lazy(Tspd_problem &problem,
+                                vector<int> &permutation,
+                                vector<int> &predecessor,
+                                Digrafo &G_aux)
+{
+    int n = problem.getN();
+    permutation.push_back(n);
+    
+
+    for (int i = 0; i < n; i++)
+    {
+        int origem = permutation[i];
+        int destino = permutation[i + 1];
+        G_aux.addArc(origem, destino, -1, problem.getDist(origem, destino));
+    }
+
+    for (int j = 1; j < n; j++){
+
+        int drone_node = permutation[j];
+        int launch = permutation[j - 1];
+        int rendezvous = permutation[j + 1];
+        double custo_pre = problem.getDist(launch, rendezvous) -
+                            problem.getDist(launch, drone_node);
+        int k_max = n;
+        for (int i = j - 1; i >= 0; i--)
+        {
+            launch = permutation[i];
+            rendezvous = permutation[j + 1];
+            double drone_delivery_dist = problem.getDist(launch, drone_node) +
+                                        problem.getDist(drone_node, rendezvous);
+            double drone_delivery_cost =
+                problem.getDroneSpeed() * drone_delivery_dist;
+            custo_pre += problem.getDist(permutation[i], permutation[i + 1]);
+            double custo_pos = 0;
+            double truck_delivery_cost = custo_pre + custo_pos;
+            double delivery_cost = max(drone_delivery_cost, truck_delivery_cost);
+
+            G_aux.addArc(launch, rendezvous, drone_node, delivery_cost);
+            if (drone_delivery_cost <= truck_delivery_cost) 
+                break;
+
+            for (int k = j + 2; k <= k_max; k++)
+            {
+                rendezvous = permutation[k];
+                drone_delivery_dist = problem.getDist(launch, drone_node) +
+                                        problem.getDist(drone_node, rendezvous);
+                drone_delivery_cost = problem.getDroneSpeed() * drone_delivery_dist;
+                custo_pos += problem.getDist(permutation[k - 1], permutation[k]);
+                truck_delivery_cost = custo_pre + custo_pos;
+                delivery_cost = max(drone_delivery_cost, truck_delivery_cost);
+
+                G_aux.addArc(launch, rendezvous, drone_node, delivery_cost);
+                if (drone_delivery_cost <= truck_delivery_cost) 
+                {
+                    k_max = k - 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    vector<double> distances(n + 1, numeric_limits<double>::max());
+    distances[0] = 0;
+    vector<int> pred(n + 1, -1);
+    for (int i = 0; i < n; i++)
+    {
+        int u = permutation[i];
+        arc *vizinhos = G_aux.nodes[u];
+        while (vizinhos != NULL)
+        {
+            int v = vizinhos->dest;
+            double arc_cost = vizinhos->cost;
+            if (distances[u] + arc_cost < distances[v])
+            {
+                distances[v] = distances[u] + arc_cost;
+                pred[v] = u;
+            }
+            vizinhos = vizinhos->prox;
+        }
+    }
+
+    predecessor = pred;
+    permutation.pop_back();
+    return distances[n];
+}

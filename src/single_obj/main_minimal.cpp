@@ -28,6 +28,7 @@
 #include "decoders/tsp_decoder.hpp"
 #include "decoders/Tspdproblem.h"
 #include "decoders/Tspdsolver.h"
+#include "decoders/Digrafo.h"
 #include "brkga_mp_ipr.hpp"
 #include "heuristics/greedy_tour.hpp"
 
@@ -142,17 +143,45 @@ int main(int argc, char* argv[]) {
 
         const auto final_status = algorithm.run(control_params, &cout);
 
-        vector<pair<double, unsigned>> tour(instance.getN());
+       vector<pair<double, unsigned>> tour(instance.getN());
         for(unsigned i = 0; i < instance.getN(); ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);;
 
         sort(tour.begin()+1, tour.end());
-        cout << "\nBest tour: \n";
+        vector<int> permutation, predecessor;
+        Digrafo graph(instance.getN());
+        cout<<"TSP tour:\n";
+        for(auto i : tour) {
+            cout<<i.second<<" ";
+            permutation.push_back(i.second);
+        }
+        cout<<endl;
+        decoder.split_lazy(instance, permutation, predecessor, graph);
 
-        for(const auto& kv : tour)
-            cout << kv.second << " ";
-            
-        cout<<"\n";
+        vector<pair<arc*,int>> final_tour;
+        int ant = instance.getN();
+        for(int i=predecessor[ant]; i>=0; i = predecessor[i]){
+            arc *a = graph.nodes[i];
+            final_tour.push_back(make_pair(a, i));
+            int len = final_tour.size()-1;
+            while(a->prox!=nullptr){
+
+                if((a->dest == ant && a->cost < final_tour[len].first->cost) || (a->dest == ant && final_tour[len].first->dest != ant)){
+                    final_tour[len] = make_pair(a, i);
+                }
+                
+                a = a->prox;
+            }
+            ant = i;
+        }
+
+        cout<<"Operations:"<<endl;
+
+        for(int i=(int)final_tour.size()-1; i>=0; i--){
+            cout<<final_tour[i].second<<","<<final_tour[i].first->drone_node<<","<<(final_tour[i].first->dest==100?0:final_tour[i].first->dest)<<"|";
+        }
+        cout<<endl;
+
 
         cout
         << "method: " << method_name[method]

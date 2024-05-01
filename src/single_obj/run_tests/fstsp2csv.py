@@ -1,12 +1,19 @@
 import os
 from opt_sol import opt_sol
 from sol2tikz import sol2tikz
+import sys
 
 #nome inst, num nodes, double/single/uniform, best_fitness, current_iteration, last_update_iteration, last_update_time, stalled_iterations, largest_iteration_offset
 
-os.chdir("../../../tsp_sol/")
+if len(sys.argv) < 2:
+    input = ""
+else:
+    input = sys.argv[1]
+
+
+os.chdir("../../../fstsp_sol" + input + '/')
 sol_path = "../tspd_instances/"
-tikz_path = "../tsp_tikz_files/"
+tikz_path = "../fstsp_" + input + "_tikz_files/"
 
 if not os.path.exists(tikz_path):
     os.mkdir(tikz_path)
@@ -18,7 +25,7 @@ csv_file = open(csv_file_name, 'w')
 sol_file_list = os.listdir()
 sol_file_list.remove(csv_file_name)
 
-csv_file.write("instance_name,num_nodes,instance_type,optimal_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n")
+csv_file.write("instance_name,num_nodes,instance_type,optimal_tsp_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n")
 
 num_list = [50, 100]
 

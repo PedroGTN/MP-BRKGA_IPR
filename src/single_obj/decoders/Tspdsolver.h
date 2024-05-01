@@ -10,6 +10,7 @@
 
 #include "Tspdproblem.h"
 #include "tsp/tsp_instance.hpp"
+#include "decoders/Digrafo.h"
 #include "brkga_mp_ipr/fitness_type.hpp"
 #include "brkga_mp_ipr/chromosome.hpp"
 
@@ -27,6 +28,7 @@ public:
 	void nearest_insertion(Tspd_problem &problem, vector<int> &permutation);
 	void cheapest_insertion(Tspd_problem &problem, vector<int> &permutation); 
 	double split_lazy(Tspd_problem &problem, vector<int> &permutation);
+	double split_lazy(Tspd_problem &problem, vector<int> &permutation, vector<int> &predecessor, Digrafo &G_aux);
 	BRKGA::fitness_t decode(BRKGA::Chromosome& chromosome, bool);
 };
 
