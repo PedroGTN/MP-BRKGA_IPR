@@ -11,10 +11,10 @@
 #include <iomanip>
 #include <math.h>
 
-#include "Tspdproblem.h"
+#include "Tspdproblem_dt.h"
 #include "configs.h"
 
-Tspd_problem::Tspd_problem(const std::string& filename) : 	truck_vel(0), 
+Tspd_problem_dt::Tspd_problem_dt(const std::string& filename) : 	truck_vel(0), 
 															drone_vel(0), 
 															num_nodes(0),
 															positions(),
@@ -41,28 +41,28 @@ Tspd_problem::Tspd_problem(const std::string& filename) : 	truck_vel(0),
         throw fstream::failure("Error reading the instance file");
     }
 
-	// distances.resize(num_nodes);
-	// for (unsigned u = 0; u < num_nodes; u++)
-	// {
-	// 	// o n+1-esimo eh uma copia do deposito
-	// 	distances[u].resize(num_nodes + 1);
-	// }
+	distances.resize(num_nodes);
+	for (unsigned u = 0; u < num_nodes; u++)
+	{
+		// o n+1-esimo eh uma copia do deposito
+		distances[u].resize(num_nodes + 1);
+	}
 
-	// for (unsigned u = 0; u < num_nodes; u++)
-	// {
-	// 	for (unsigned v = 0; v <= u; v++)
-	// 	{
-	// 		double aux = sqrt(
-	// 		pow((positions[u*2] - positions[v*2]), 2) +
-    // 		pow((positions[u*2 + 1] - positions[v*2 + 1]), 2));
+	for (unsigned u = 0; u < num_nodes; u++)
+	{
+		for (unsigned v = 0; v <= u; v++)
+		{
+			double aux = sqrt(
+			pow((positions[u*2] - positions[v*2]), 2) +
+    		pow((positions[u*2 + 1] - positions[v*2 + 1]), 2));
 
-	// 		distances[u][v] = aux;
-	// 		distances[v][u] = aux;
-	// 	}
-	// 	distances[u][num_nodes] = sqrt(
-	// 		pow(positions[u*2] - positions[0], 2) +
-	// 		pow(positions[u*2 + 1] - positions[1], 2));
-	// }
+			distances[u][v] = aux;
+			distances[v][u] = aux;
+		}
+		distances[u][num_nodes] = sqrt(
+			pow(positions[u*2] - positions[0], 2) +
+			pow(positions[u*2 + 1] - positions[1], 2));
+	}
 
 	// if (DEBUG >= 1)
 	// {
@@ -94,25 +94,25 @@ Tspd_problem::Tspd_problem(const std::string& filename) : 	truck_vel(0),
 	// }
 }
 
-Tspd_problem::~Tspd_problem()
+Tspd_problem_dt::~Tspd_problem_dt()
 {
 	// TODO Auto-generated destructor stub
 }
 
-double Tspd_problem::getDist(int u, int v)
+double Tspd_problem_dt::getDist(int u, int v)
 {
 	// pré calcular as distancias entre cada par de vértices
 	// e usar a matriz distances[][] caso trabalhando com algoritmos populacionais
-	// return distances[u][v];
+	return distances[u][v];
 
-	if (v == int(num_nodes))
-		v = 0;
-	return sqrt(
-		pow(positions[u*2] - positions[v*2], 2) +
-		pow(positions[u*2 + 1] - positions[v*2 + 1], 2));
+	// if (v == int(num_nodes))
+	// 	v = 0;
+	// return sqrt(
+	// 	pow(positions[u*2] - positions[v*2], 2) +
+	// 	pow(positions[u*2 + 1] - positions[v*2 + 1], 2));
 }
 
-unsigned int Tspd_problem::getN() { return num_nodes; }
+unsigned int Tspd_problem_dt::getN() { return num_nodes; }
 
-double Tspd_problem::getTruckSpeed() { return truck_vel; } // actually pace, i.e., 1/speed
-double Tspd_problem::getDroneSpeed() { return drone_vel; } // actually pace, i.e., 1/speed
+double Tspd_problem_dt::getTruckSpeed() { return truck_vel; } // actually pace, i.e., 1/speed
+double Tspd_problem_dt::getDroneSpeed() { return drone_vel; } // actually pace, i.e., 1/speed

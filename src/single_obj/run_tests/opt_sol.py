@@ -11,7 +11,6 @@ def opt_sol(instance, sol):
         n = op.split()
         ret+=dist_calc(int(n[0]), int(n[1]), locations)
 
-    print(ret)
     return ret
 
 def dist_calc(n1, n2, locations):

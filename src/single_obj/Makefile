@@ -70,6 +70,7 @@ OBJS = \
 	./decoders/tsp_decoder.o \
 	./decoders/Tspdsolver.o \
 	./decoders/Tspdproblem.o \
+	./decoders/Tspdproblem_dt.o \
 	./decoders/Digrafo.o \
 	./decoders/tsp_decoder_pre_allocating.o
 

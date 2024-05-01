@@ -48,12 +48,13 @@ BRKGA::fitness_t TSP_Decoder::decode(Chromosome& chromosome,
     sort(permutation.begin()+1, permutation.end());
 
     unsigned v_size = permutation.size();
-    unsigned border = ceil(v_size * 0.1);
+    unsigned border = ceil(v_size * 0.1); //v_size * <porcentagem de outliers descartados>
     double v_media = 0;
 
-    for(unsigned i = border; i<v_size - border; i++){
-        v_media += permutation[i].first/v_size;
-    }
+    for(unsigned i = border; i<v_size - border; i++)
+        v_media += permutation[i].first;
+
+    v_media /= (v_size - 2*border);
 
     for(unsigned i = 0; i<v_size; i++){
         if(chromosome[i] >= v_media)
@@ -61,6 +62,8 @@ BRKGA::fitness_t TSP_Decoder::decode(Chromosome& chromosome,
         else
             chromosome[i] = 0.5 - 0.49999999 *((v_media - chromosome[i]) / (v_media));
     }
+
+    chromosome[0] = 0;
 
     double cost = instance.distance(permutation.front().second,
                                      permutation.back().second); 

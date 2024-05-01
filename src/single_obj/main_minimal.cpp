@@ -27,7 +27,9 @@
 #include "tsp/tsp_instance.hpp"
 #include "decoders/tsp_decoder.hpp"
 #include "decoders/Tspdproblem.h"
+#include "decoders/Tspdproblem_dt.h"
 #include "decoders/Tspdsolver.h"
+#include "decoders/Digrafo.h"
 #include "brkga_mp_ipr.hpp"
 #include "heuristics/greedy_tour.hpp"
 
@@ -63,10 +65,12 @@ int main(int argc, char* argv[]) {
         const unsigned num_threads = stoi(argv[4]);
         const unsigned method = stoi(argv[5]);
         const string instance_file = argv[6];
+        const bool inst_type = stoi(argv[7]);
         const string method_name[] = {"no_initPop", "rand_initPop", "def_initPop"};
 
         //cout << "Reading data..." << endl;
         auto instance = Tspd_problem(instance_file);
+        auto instance2 = Tspd_problem_dt(instance_file);
 
         ////////////////////////////////////////
         // Read algorithm parameters
@@ -85,13 +89,30 @@ int main(int argc, char* argv[]) {
         ////////////////////////////////////////
 
         //cout << "Building BRKGA data and initializing..." << endl;
+        BRKGA::AlgorithmStatus final_status;
 
-        Tspd_solver decoder(instance);
+        if(!inst_type){
+            Tspd_solver<Tspd_problem> decoder(instance);
 
-        BRKGA::BRKGA_MP_IPR<Tspd_solver> algorithm(
-            decoder, BRKGA::Sense::MINIMIZE, seed,
-            instance.num_nodes, brkga_params, num_threads
-        );
+            BRKGA::BRKGA_MP_IPR<Tspd_solver<Tspd_problem>> algorithm(
+                decoder, BRKGA::Sense::MINIMIZE, seed,
+                instance.num_nodes, brkga_params, num_threads
+            );
+
+            algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(0));
+            final_status = algorithm.run(control_params, &cout);
+        } 
+        else{
+            Tspd_solver<Tspd_problem_dt> decoder(instance2);
+
+            BRKGA::BRKGA_MP_IPR<Tspd_solver<Tspd_problem_dt>> algorithm(
+                decoder, BRKGA::Sense::MINIMIZE, seed,
+                instance.num_nodes, brkga_params, num_threads
+            );
+
+            algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(0));
+            final_status = algorithm.run(control_params, &cout);
+        }
 
         ////////////////////////////////////////
         // Find good solutions / evolve
@@ -107,7 +128,7 @@ int main(int argc, char* argv[]) {
 		//const auto chromosome_size = instance.num_nodes;
 		
 		
-		{ // local scope to deallocate memory.
+		// { // local scope to deallocate memory.
         // To inject the initial tour, we need to create chromosome representing
         // that solution. First, we create a set of keys to be used in the
         // chromosome.
@@ -126,33 +147,61 @@ int main(int argc, char* argv[]) {
         //     initial_chromosome[initial_tour[i]] = keys[i];
 
 
-        switch(method){
-            case 0: 
-                break;
-            case 1: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(0));
-                break;
-            //está comentado porque o warm start ainda não está funcionando
-            //case 2: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(1, inital_chromosome));
-               //break;
-            default:
-                break;
-        }
+        // switch(method){
+        //     case 0: 
+        //         break;
+        //     case 1: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(0));
+        //         break;
+        //     //está comentado porque o warm start ainda não está funcionando
+        //     //case 2: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(1, inital_chromosome));
+        //        //break;
+        //     default:
+        //         break;
+        // }
 		
-        } // end local scope
-
-        const auto final_status = algorithm.run(control_params, &cout);
+        // } // end local scope
+        Tspd_solver<Tspd_problem> decoder(instance);
 
         vector<pair<double, unsigned>> tour(instance.getN());
         for(unsigned i = 0; i < instance.getN(); ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);;
 
         sort(tour.begin()+1, tour.end());
-        cout << "\nBest tour: \n";
+        vector<int> permutation, predecessor;
+        Digrafo graph(instance.getN());
+        cout<<"TSP tour:\n";
+        for(auto i : tour) {
+            cout<<i.second<<" ";
+            permutation.push_back(i.second);
+        }
+        cout<<endl;
+        decoder.split_lazy(instance, permutation, predecessor, graph);
 
-        for(const auto& kv : tour)
-            cout << kv.second << " ";
-            
-        cout<<"\n";
+        vector<pair<arc*,int>> final_tour;
+        int ant = instance.getN();
+        for(int i=predecessor[ant]; i>=0; i = predecessor[i]){
+            arc *a = graph.nodes[i];
+            final_tour.push_back(make_pair(a, i));
+            int len = final_tour.size()-1;
+            while(a->prox!=nullptr){
+
+                if((a->dest == ant && a->cost < final_tour[len].first->cost) || (a->dest == ant && final_tour[len].first->dest != ant)){
+                    final_tour[len] = make_pair(a, i);
+                }
+                
+                a = a->prox;
+            }
+            ant = i;
+        }
+
+        cout<<"Operations:"<<endl;
+
+        for(int i=(int)final_tour.size()-1; i>=0; i--){
+            cout<<final_tour[i].second<<","<<final_tour[i].first->drone_node<<","<<(final_tour[i].first->dest==100?0:final_tour[i].first->dest)<<"|";
+        }
+        cout<<endl;
+
+
 
         cout
         << "method: " << method_name[method]

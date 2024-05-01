@@ -26,19 +26,16 @@ Digrafo::Digrafo(int n) : nodes()
 Digrafo::~Digrafo()
 {
 	for(uint32_t i=0; i<nodes.size(); i++){
-		arc *del = nodes[i], *aux;
+		arc *del, *aux = nodes[i];
 
-		for(aux = del->prox; aux!= nullptr; del = aux, aux = del->prox){
+		// for(del = nodes[i], aux = del->prox; aux!= nullptr; del = aux, aux = del->prox) delete del;
+		// if(del != nullptr) delete del;
+
+		while(aux != nullptr){
+			del = aux;
+			aux = del->prox;
 			delete del;
 		}
-
-		if(del != nullptr) delete del;
-
-		// while(aux != nullptr){
-		// 	del = aux;
-		// 	aux = del->prox;
-		// 	delete del;
-		// }
 	}
 }
 
