@@ -143,9 +143,9 @@ int main(int argc, char* argv[]) {
 
         const auto final_status = algorithm.run(control_params, &cout);
 
-       vector<pair<double, unsigned>> tour(instance.getN());
+        vector<pair<double, unsigned>> tour(instance.getN());
         for(unsigned i = 0; i < instance.getN(); ++i)
-            tour[i] = make_pair(final_status.best_chromosome[i], i);;
+            tour[i] = make_pair(final_status.best_chromosome[i], i);
 
         sort(tour.begin()+1, tour.end());
         vector<int> permutation, predecessor;

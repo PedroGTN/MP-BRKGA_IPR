@@ -6,3 +6,4 @@
 ./main_minimal 2700001 config-basic.conf 10 1 1 ../../tspd_instances/uniform/uniform-98-n100.txt
 
 ./main_minimal_tsp 2700001 config-basic.conf 5 1 1 ../../tspd_instances/doublecenter/doublecenter-71-n50.txt
+./main_minimal_tsp 2700001 config.conf 60 1 1 ../../tspd_instances/doublecenter/doublecenter-71-n50.txt

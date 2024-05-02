@@ -91,6 +91,7 @@ int main(int argc, char* argv[]) {
             instance.num_nodes, brkga_params, num_threads
         );
 
+
         ////////////////////////////////////////
         // Find good solutions / evolve
         ////////////////////////////////////////
