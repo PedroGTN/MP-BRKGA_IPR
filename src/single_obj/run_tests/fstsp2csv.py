@@ -81,6 +81,7 @@ for inst_type in sol_file_list:
 
                         mode_folder = inst_folder + '/' + m
                         runtime_list = os.listdir(mode_folder)
+
                         for t in runtime_list:
 
                             tikz_runtime_loc = tikz_mode_loc + t + '/'
@@ -94,10 +95,12 @@ for inst_type in sol_file_list:
                                 tikz_seed_loc = tikz_runtime_loc + s + '/'
                                 if not os.path.exists(tikz_seed_loc):
                                     os.mkdir(tikz_seed_loc)
-                                    
-                                sol2tikz(mode_folder+'/'+s, tikz_seed_loc+'path.tex', instance_loc)
 
-                                sfile = open(mode_folder + '/' + s, 'r')
+                                seed_folder = runtime_folder + '/' + s
+                                    
+                                sol2tikz(seed_folder, tikz_seed_loc+'path.tex', instance_loc)
+
+                                sfile = open(seed_folder, 'r')
                                 lines = sfile.readlines()
                                 best_fitness += float(lines[-15].split()[-1])
                                 current_iteration += float(lines[-14].split()[-1])
