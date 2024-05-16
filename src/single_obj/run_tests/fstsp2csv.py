@@ -62,7 +62,7 @@ for inst_type in sol_file_list:
                     alpha = '2'
                     if(inst_split[1][:-2] == 'alpha'):
                         alpha = inst_split[1][-1]
-                    csv_file.write(i + ',' + inst_split[-1][1:] + ',' + inst_type + ',' + alpha + ',')
+                    csv_file.write(inst + ',' + inst_split[-1][1:] + ',' + inst_type + ',' + alpha + ',')
                     inst_folder = inst_type + '/' + inst
                     mode_list = os.listdir(inst_folder)
                     optimal_solution = opt_sol(instance_loc, sol_file_loc)
@@ -80,29 +80,38 @@ for inst_type in sol_file_list:
                             os.mkdir(tikz_mode_loc)
 
                         mode_folder = inst_folder + '/' + m
-                        seed_list = os.listdir(mode_folder)
-                        for s in seed_list:
-                            tikz_seed_loc = tikz_mode_loc + s + '/'
-                            if not os.path.exists(tikz_seed_loc):
-                                os.mkdir(tikz_seed_loc)
-                                
-                            sol2tikz(mode_folder+'/'+s, tikz_seed_loc+'path.tex', instance_loc)
+                        runtime_list = os.listdir(mode_folder)
+                        for t in runtime_list:
 
-                            sfile = open(mode_folder + '/' + s, 'r')
-                            lines = sfile.readlines()
-                            best_fitness += float(lines[-15].split()[-1])
-                            current_iteration += float(lines[-14].split()[-1])
-                            last_update_iteration += float(lines[-13].split()[-1])
-                            last_update_time += float(lines[-11].split()[-1][:-1])
-                            current_time += float(lines[-12].split()[-1][:-1])
-                            stalled_iterations += float(lines[-9].split()[-1])
-                            largest_iteration_offset += float(lines[-10].split()[-1])
+                            tikz_runtime_loc = tikz_mode_loc + t + '/'
+                            if not os.path.exists(tikz_runtime_loc):
+                                os.mkdir(tikz_runtime_loc)
+
+                            runtime_folder = mode_folder + '/' + t
+                            seed_list = os.listdir(runtime_folder)
+
+                            for s in seed_list:
+                                tikz_seed_loc = tikz_runtime_loc + s + '/'
+                                if not os.path.exists(tikz_seed_loc):
+                                    os.mkdir(tikz_seed_loc)
+                                    
+                                sol2tikz(mode_folder+'/'+s, tikz_seed_loc+'path.tex', instance_loc)
+
+                                sfile = open(mode_folder + '/' + s, 'r')
+                                lines = sfile.readlines()
+                                best_fitness += float(lines[-15].split()[-1])
+                                current_iteration += float(lines[-14].split()[-1])
+                                last_update_iteration += float(lines[-13].split()[-1])
+                                last_update_time += float(lines[-11].split()[-1][:-1])
+                                current_time += float(lines[-12].split()[-1][:-1])
+                                stalled_iterations += float(lines[-9].split()[-1])
+                                largest_iteration_offset += float(lines[-10].split()[-1])
 
 
 
-
+                    media = (len(seed_list)+len(runtime_list))
                     
-                    csv_file.write( ("{:.4f}".format(optimal_solution)) + ',' + str(best_fitness/5) + ',' + ("{:.4f}".format((best_fitness/5) - optimal_solution)) + ',' + ("{:.4f}".format(((best_fitness/5)/optimal_solution)*100)) + '%,' + str(current_iteration/5) + ',' + str(last_update_iteration/5) + ',' + str(current_time/5) + ','+ str(last_update_time/5) + ',' + str(stalled_iterations/5) + ',' + str(largest_iteration_offset/5) + "\n")
+                    csv_file.write( ("{:.4f}".format(optimal_solution)) + ',' + str(best_fitness/media) + ',' + ("{:.4f}".format((best_fitness/media) - optimal_solution)) + ',' + ("{:.4f}".format(((best_fitness/media)/optimal_solution)*100)) + '%,' + str(current_iteration/media) + ',' + str(last_update_iteration/media) + ',' + str(current_time/media) + ','+ str(last_update_time/media) + ',' + str(stalled_iterations/media) + ',' + str(largest_iteration_offset/media) + "\n")
                     if(alpha == '3'):
                         csv_file.write('\n')
         

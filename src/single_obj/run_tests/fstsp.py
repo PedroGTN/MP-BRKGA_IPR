@@ -5,14 +5,13 @@ from multiprocessing import Pool
 # python3 run_tsp_d.py  60 1
 
 if len(sys.argv) == 2 and sys.argv[1] == "help":
-    print("python3 run_brkga.py <max time> <num threads>" + \
-    "\n<max time>: maximum instance running time" + \
+    print("python3 run_brkga.py <num threads>" + \
     "\n<num threads>: maximum threads for decoding in brkga" + \
     "\n<suffix>: to be added to the end of the filenames")
     exit()
 
 if len(sys.argv) < 4:
-    print("python3 run_brkga.py <max time> <num threads> <suffix>" + \
+    print("python3 run_brkga.py <num threads> <suffix>" + \
     "\nuse \"python3 run_brkga.py help\" for more details")
     exit()
 
@@ -26,10 +25,10 @@ command_list = []
 pool = Pool(processes=3)
 
 exec_path = "../main_minimal"
-suffix = sys.argv[3]
+suffix = sys.argv[2]
 instances_path = "../../../tspd_instances/"
 tsp_solutions_path = "../../../fstsp_sol_" + suffix + '/'
-runtime = sys.argv[1]
+runtimes = [15, 30, 60, 120, 240]
 threads = sys.argv[2]
 methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
 
@@ -62,27 +61,29 @@ for f in instances_folders:
             
             for m in methods[1:-1]:
                 sol_by_method_path = sol_by_inst_path + '/' + m[0]
-                
-                if not os.path.exists(sol_by_method_path):
-                    os.mkdir(sol_by_method_path)
 
-                for seed in seeds:
-                    cleanseed = seed.strip()
-                    # print(instance_path)
-                    
-                    solution_path = sol_by_method_path + '/' + cleanseed
-                    solution_path = solution_path + ".sol"
+                for t in runtimes:
 
+                    sol_by_runtime = sol_by_method_path + '/' + t
                     
-                    realruntime = runtime if int(num_nodes[-1][1:-4]) > 30 else '5'
-                    # print(solution_path)
-                    exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
-                    " " + threads + " " + str(m[1]) + " " + instance_path + " > " + solution_path
-                    command_list.append(exec_command)
-                    
-                    if len(command_list) == 3:
-                        pool.map(execute, command_list)
-                        command_list.clear()
+                    if not os.path.exists(sol_by_method_path):
+                        os.mkdir(sol_by_method_path)
+
+                    for seed in seeds:
+                        cleanseed = seed.strip()
+                        # print(instance_path)
+                        
+                        solution_path = sol_by_runtime + '/' + cleanseed + ".sol"
+                        
+                        realruntime = t if int(num_nodes[-1][1:-4]) > 30 else '5'
+                        # print(solution_path)
+                        exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
+                        " " + threads + " " + str(m[1]) + " " + instance_path + " > " + solution_path
+                        command_list.append(exec_command)
+                        
+                        if len(command_list) == 3:
+                            pool.map(execute, command_list)
+                            command_list.clear()
 
 seeds_file.close()
 
