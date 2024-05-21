@@ -81,7 +81,7 @@ for f in instances_folders:
                         realruntime = str(t) if int(num_nodes[-1][1:-4]) > 30 else '5'
                         # print(solution_path)
                         exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
-                        " " + threads + " " + str(m[1]) + " " + instance_path + " > " + solution_path
+                        " " + threads + " " + str(m[1]) + " " + instance_path + " > " + solution_path + '&& rm ../*concorde_*'
 
                         if(not os.path.isfile(solution_path)):
                             command_list.append(exec_command)
