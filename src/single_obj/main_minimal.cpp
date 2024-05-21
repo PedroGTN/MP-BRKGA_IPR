@@ -24,6 +24,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
+#define SCALER 1000
+
 #include "tsp/tsp_instance.hpp"
 #include "decoders/tsp_decoder.hpp"
 #include "decoders/Tspdproblem.h"
@@ -31,6 +33,8 @@
 #include "decoders/Digrafo.h"
 #include "brkga_mp_ipr.hpp"
 #include "heuristics/greedy_tour.hpp"
+#include "source/discorde-cpp-api/discorde_cpp.h"
+#include "heuristics/bolhas_elipticas.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -39,6 +43,46 @@
 #include <random>
 
 using namespace std;
+
+uint64_t mergesort_countinv(vector<uint64_t> arr, vector<uint64_t> arr2)
+{
+    uint64_t size = arr.size();
+
+	vector<uint64_t> aux_arr(size), *pt1, *pt2, auxr(size);
+
+	for(uint64_t i=0; i<size; i++)
+		auxr[arr2[i]] = i;
+
+	pt1 = &arr, pt2 = &aux_arr;
+
+	uint64_t inv_num = 0;
+
+	for(uint64_t i=2; i<size*2; i<<=1)
+	{
+		for(uint64_t j=0; j<size; j+=i)
+		{
+			uint64_t k=j, l=j+(i/2), aux=j+(i/2), aux2=j;
+			uint64_t aux3 = (i/2)+j;
+
+			while(l<j+i && l<size && k<aux && k<size)
+			{
+				if(auxr[pt1[0][k]]<auxr[pt1[0][l]])
+					pt2[0][aux2++] = pt1[0][k++];
+				else
+					pt2[0][aux2++] = pt1[0][l++], inv_num += aux3 - k;
+			}
+
+			while(l<j+i && l<size)
+				pt2[0][aux2++] = pt1[0][l++];
+
+			while(k<aux && k<size)
+				pt2[0][aux2++] = pt1[0][k++];
+		}
+		swap(pt1, pt2);
+	}
+
+	return inv_num;
+}
 
 //-------------------------------[ Main ]------------------------------------//
 
@@ -103,41 +147,157 @@ int main(int argc, char* argv[]) {
 			 
 		
 		
-		
-		//auto initial_solution = greedy_tour(instance);
-		//const auto chromosome_size = instance.num_nodes;
-		
-		
 		{ // local scope to deallocate memory.
         // To inject the initial tour, we need to create chromosome representing
         // that solution. First, we create a set of keys to be used in the
         // chromosome.
-		
-        // std::mt19937 rng(seed);
-        // vector<double> keys(chromosome_size);
-        // for(auto& key : keys)
-        //     key = generate_canonical<double, numeric_limits<double>::digits>(rng);
 
-        // sort(keys.begin(), keys.end());
+        srand(0);
 
-        // // Then, we visit each node in the tour and assign to it a key.
-        // BRKGA::Chromosome initial_chromosome(chromosome_size);
-        // auto& initial_tour = initial_solution.second;
-        // for(size_t i = 0; i < keys.size(); i++)
-        //     initial_chromosome[initial_tour[i]] = keys[i];
+        // Create a random costs matrix
+        int32_t** cost_matrix = new int32_t*[instance.num_nodes];
+        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+            cost_matrix[i] = new int32_t[instance.num_nodes];
+        }
+        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+            cost_matrix[i][i] = 0;
+            for (uint64_t j = i + 1; j < instance.num_nodes; ++j) {
+                cost_matrix[i][j] = round(instance.getDist(i, j)*SCALER);
+                cost_matrix[j][i] = cost_matrix[i][j];
+            }
+        }
 
+
+        // =========================================================================
+        // Solve the problem
+        // =========================================================================
+
+        // Allocate resources to store the solution from Lin-Kernighan heuristic
+        int* lk_tour = new int[instance.num_nodes];
+        double lk_cost;
+        int lk_return;
+
+        // Solve the problem using Lin-Kernighan heuristic
+        lk_return = discorde::linkernighan_full(instance.num_nodes, cost_matrix, lk_tour, &lk_cost);
+
+        cout << "lk tour: [ ";
+        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+            cout << lk_tour[i] << " ";
+        }
+        cout << "]" << endl << endl;
+        cout << "Cost: " << lk_cost/SCALER << endl;
+        cout << "Is feasible? " << ((lk_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl << endl;
+
+        // Allocate resources to store the solution from Concorde solver
+        int* cc_tour = new int[instance.num_nodes];
+        double cc_cost;
+        int cc_return;
+        int cc_status;
+
+        // Solve the problem using Concorde solver (using the tour obtained previously
+        // with Lin-Kernighan heuristic as a starting solution, if any was found)
+        int* cc_start = (lk_return == DISCORDE_RETURN_OK ? lk_tour : NULL);
+        cc_return = discorde::concorde_full(instance.num_nodes, cost_matrix, cc_tour, &cc_cost, &cc_status, cc_start);
+
+        cout<<"cc_return: "<<cc_return;
+        cout << "\ncc tour: [ ";
+        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+            cout << cc_tour[i] << " ";
+        }
+        cout << "]" << endl;
+        cout << "Cost: " << cc_cost/SCALER << endl;
+        cout << "Is feasible? " << ((cc_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl;
+        cout << "Is optimal? " << ((cc_return == DISCORDE_RETURN_OK && cc_status == DISCORDE_STATUS_OPTIMAL) ? "yes" : "no") << endl << endl;
+
+
+        vector<vector<uint64_t>> tours; 
+        vector<uint64_t> aux(instance.num_nodes);
+        vector<uint64_t> aux2;
+
+
+        for(uint64_t i=0; i < instance.num_nodes; i++)
+            aux[i] = cc_tour[i];
+        
+        tours.push_back(aux);
+
+        for(uint64_t i=0; i < instance.num_nodes; i++)
+            aux[i] = lk_tour[i];
+
+        tours.push_back(aux);
+
+        aux.assign(1, 0); aux.insert(aux.end(), tours[1].rbegin(), tours[1].rend()-1);
+
+        if(mergesort_countinv(tours[0], tours[1]) > mergesort_countinv(tours[0], aux))
+            tours[1] = aux;
+   
+
+        double alpha = 1/instance.drone_vel;
+
+        for(int i=0; i<2; i++){
+            for(double d=0.5; d<2.1; d+=0.25){
+                if(alpha*d > 1){
+                    aux = tours[i];
+                    bolhas_elipticas_diretas(aux, instance, d);
+                    tours.push_back(aux);
+
+                    aux = tours[i];
+                    bolhas_elipticas_reversas(aux, instance, d);
+                    tours.push_back(aux);
+
+                    aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
+                    bolhas_elipticas_diretas(aux, instance, d);
+                    aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
+                    tours.push_back(aux2);
+                
+                    aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
+                    bolhas_elipticas_reversas(aux, instance, d);
+                    aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
+                    tours.push_back(aux2);
+                }
+            }
+        }        
+        
+        vector<BRKGA::Chromosome> chromosomes;
+        std::mt19937 rng(seed);
+        double best = 999999999;
+        for(uint64_t i=0; i<tours.size(); i++){
+
+            vector<double> keys(instance.num_nodes);
+            for(auto& key : keys)
+                key = generate_canonical<double, numeric_limits<double>::digits>(rng);
+            
+
+            sort(keys.begin(), keys.end());
+
+            // Then, we visit each node in the tour and assign to it a key.
+            BRKGA::Chromosome chromosome(instance.num_nodes);
+
+            for(size_t j = 0; j < keys.size(); j++)
+                chromosome[tours[i][j]] = keys[j];
+
+            best = min(best, decoder.decode(chromosome, true));
+
+            chromosomes.push_back(chromosome);
+        }
+        cout<<"best warm start solution: "<<best<<endl;
 
         switch(method){
             case 0: 
                 break;
             case 1: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(0));
                 break;
-            //está comentado porque o warm start ainda não está funcionando
-            //case 2: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(1, inital_chromosome));
-               //break;
+            case 2: algorithm.setInitialPopulation(vector<BRKGA::Chromosome>(chromosomes.begin(), chromosomes.end()));
+               break;
             default:
                 break;
         }
+        
+        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+            delete[] cost_matrix[i];
+        }
+        delete[] cost_matrix;
+        delete[] lk_tour;
+        delete[] cc_tour;
 		
         } // end local scope
 
@@ -189,6 +349,7 @@ int main(int argc, char* argv[]) {
         << "\nInstance: "<< argv[4]
         << final_status
         << endl;
+
     }
     catch(exception& e) {
         cerr
