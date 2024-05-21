@@ -43,29 +43,28 @@ seeds = seeds_file.readlines()
 instances_folders = os.listdir(instances_path)
 
 
-for f in instances_folders:
-    instances_folder_especific = instances_path + f + '/' 
-    instances_file_list = os.listdir(instances_folder_especific)
-    instances_file_list.remove("solutions")
+for t in runtimes:
+    for f in instances_folders:
+        instances_folder_especific = instances_path + f + '/' 
+        instances_file_list = os.listdir(instances_folder_especific)
+        instances_file_list.remove("solutions")
 
-    sol_by_folder_path = tsp_solutions_path + f
-    if not os.path.exists(sol_by_folder_path):
-        os.mkdir(sol_by_folder_path)
-    for i in instances_file_list:    
-        instance_path = instances_folder_especific + i
-        num_nodes = instance_path.split('-')
-        if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75):
-            sol_by_inst_path = sol_by_folder_path + '/' + i[:-4]
-            if not os.path.exists(sol_by_inst_path):
-                    os.mkdir(sol_by_inst_path)
-            
-            for m in methods[1:-1]:
-                sol_by_method_path = sol_by_inst_path + '/' + m[0]
+        sol_by_folder_path = tsp_solutions_path + f
+        if not os.path.exists(sol_by_folder_path):
+            os.mkdir(sol_by_folder_path)
+        for i in instances_file_list:    
+            instance_path = instances_folder_especific + i
+            num_nodes = instance_path.split('-')
+            if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75):
+                sol_by_inst_path = sol_by_folder_path + '/' + i[:-4]
+                if not os.path.exists(sol_by_inst_path):
+                        os.mkdir(sol_by_inst_path)
+                
+                for m in methods[1:-1]:
+                    sol_by_method_path = sol_by_inst_path + '/' + m[0]
 
-                if not os.path.exists(sol_by_method_path):
-                    os.mkdir(sol_by_method_path)
-
-                for t in runtimes:
+                    if not os.path.exists(sol_by_method_path):
+                        os.mkdir(sol_by_method_path)
 
                     sol_by_runtime = sol_by_method_path + '/' + str(t)
                     

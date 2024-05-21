@@ -259,7 +259,7 @@ int main(int argc, char* argv[]) {
         
         vector<BRKGA::Chromosome> chromosomes;
         std::mt19937 rng(seed);
-        double best = 999999999;
+        double best = numeric_limits<double>::max();
         for(uint64_t i=0; i<tours.size(); i++){
 
             vector<double> keys(instance.num_nodes);

@@ -113,7 +113,8 @@ int main(int argc, char* argv[]) {
         //cout << "Reading data..." << endl;
         Tspd_problem instance = Tspd_problem(instance_file);
         Tspd_solver decoder(instance);	 
-		
+
+        auto start_matrix = chrono::high_resolution_clock::now();		
 
         srand(0);
 
@@ -130,18 +131,23 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        auto end_matrix = chrono::high_resolution_clock::now();	
 
         // =========================================================================
         // Solve the problem
         // =========================================================================
 
         // Allocate resources to store the solution from Lin-Kernighan heuristic
+        auto start_lk = chrono::high_resolution_clock::now();		
+
         int* lk_tour = new int[instance.num_nodes];
         double lk_cost;
         int lk_return;
 
         // Solve the problem using Lin-Kernighan heuristic
         lk_return = discorde::linkernighan_full(instance.num_nodes, cost_matrix, lk_tour, &lk_cost);
+        auto end_lk = chrono::high_resolution_clock::now();		
+
 
         cout << "lk tour: [ ";
         for (uint64_t i = 0; i < instance.num_nodes; ++i) {
@@ -206,9 +212,10 @@ int main(int argc, char* argv[]) {
 
         double alpha = 1/instance.drone_vel;
 
-        for(int i=0; i<2; i++){
-            for(double d=0.5; d<2.1; d+=0.25){
+        for(int i=0; i<2; i++){ //otimo e lkh
+            for(double d=0.5; d<2.1; d+=0.25){ //relaxamento
                 if(alpha*d > 1){
+                    //ordem original
                     aux = tours[i];
                     bolhas_elipticas_diretas(aux, instance, d);
                     tours.push_back(aux);
@@ -217,6 +224,7 @@ int main(int argc, char* argv[]) {
                     bolhas_elipticas_reversas(aux, instance, d);
                     tours.push_back(aux);
 
+                    //ordem inversa
                     aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
                     bolhas_elipticas_diretas(aux, instance, d);
                     aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
@@ -237,7 +245,7 @@ int main(int argc, char* argv[]) {
 
         // cout<<endl;
 
-        double best = 99999999;
+        double best = numeric_limits<double>::max();
 
         for(uint64_t i=0; i<tours.size(); i++){
             cout<<i<<": ";
