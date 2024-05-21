@@ -1,0 +1,24 @@
+Custom stopping criteria not supplied by the user. Using max. time = 15s and max. stall_offset = 0
+Using 1 threads for decoding
+TSP tour:
+0 51 86 92 50 38 87 90 60 80 11 18 63 89 95 84 61 19 65 78 55 94 79 36 39 77 74 5 35 66 97 43 17 76 71 67 31 81 99 47 30 21 83 33 1 75 69 4 41 3 64 26 40 22 62 9 14 93 70 8 16 52 28 72 13 20 88 82 27 91 48 68 58 10 85 2 42 57 45 12 29 73 37 23 53 25 96 44 15 34 7 24 59 46 49 6 54 32 98 56 
+Operations:
+0,51,92|92,50,38|38,87,90|90,60,80|80,18,63|63,89,95|95,84,61|61,19,65|65,78,94|94,79,36|36,39,74|74,5,66|66,97,43|43,76,71|71,67,81|81,99,47|47,30,21|21,83,1|1,75,69|69,41,64|64,26,40|40,22,62|62,9,93|93,70,8|8,52,28|28,72,13|13,20,88|88,82,27|27,91,48|48,68,58|58,10,85|85,2,42|42,57,12|12,29,73|73,37,23|23,53,25|25,96,44|44,34,7|7,24,59|59,49,6|6,54,32|32,98,0|
+method: rand_initPop
+seed: 7515072
+Instance: 1
+best_fitness: 605.904
+current_iteration: 635
+last_update_iteration: 621
+current_time: 15.0093s
+last_update_time: 14.6761s
+largest_iteration_offset: 86
+stalled_iterations: 14
+path_relink_time: 0s
+num_path_relink_calls: 0
+num_homogenities: 0
+num_best_improvements: 0
+num_elite_improvements: 0
+num_exchanges: 0
+num_shakes: 0
+num_resets: 0
