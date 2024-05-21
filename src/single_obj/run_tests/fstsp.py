@@ -21,17 +21,17 @@ def execute(comando):
     print("Executing: " + str(comando))
     os.system(str(comando))
 
-command_list = []
-pool = Pool(processes=3)
 
 exec_path = "../main_minimal"
 suffix = sys.argv[2]
 instances_path = "../../../tspd_instances/"
 tsp_solutions_path = "../../../fstsp_sol_" + suffix + '/'
-runtimes = [15, 30, 60, 90]
-threads = sys.argv[2]
+runtimes = [15, 30, 60, 120, 240]
+threads = int(sys.argv[1])
 methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
 
+command_list = []
+pool = Pool(processes=threads)
 
 if not os.path.exists(tsp_solutions_path):
     os.mkdir(tsp_solutions_path)
@@ -81,12 +81,12 @@ for f in instances_folders:
                         realruntime = str(t) if int(num_nodes[-1][1:-4]) > 30 else '5'
                         # print(solution_path)
                         exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
-                        " " + threads + " " + str(m[1]) + " " + instance_path + " > " + solution_path + '&& rm ../*concorde_*'
+                        " 1 " + str(m[1]) + " " + instance_path + " > " + solution_path + '&& rm ../*concorde_*'
 
                         if(not os.path.isfile(solution_path)):
                             command_list.append(exec_command)
                         
-                        if len(command_list) == 3:
+                        if len(command_list) == threads:
                             pool.map(execute, command_list)
                             command_list.clear()
 

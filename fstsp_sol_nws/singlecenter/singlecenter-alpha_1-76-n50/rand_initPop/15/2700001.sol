@@ -1,19 +1,19 @@
 Custom stopping criteria not supplied by the user. Using max. time = 15s and max. stall_offset = 0
-Using 3 threads for decoding
+Using 1 threads for decoding
 TSP tour:
-0 6 37 30 17 48 16 22 18 9 4 11 5 41 40 38 25 39 32 7 27 1 26 13 35 10 24 3 8 45 34 19 43 15 21 47 14 49 33 23 44 36 28 31 2 29 42 46 12 20 
+0 6 37 30 17 48 16 22 18 9 34 11 5 41 40 38 25 39 32 7 27 1 26 13 35 10 24 3 8 45 4 19 43 15 21 47 14 49 33 23 44 36 28 31 2 29 42 46 12 20 
 Operations:
 0,37,30|30,22,18|18,41,40|9,41,38|38,26,35|35,10,43|43,44,50|
 method: rand_initPop
 seed: 2700001
-Instance: 3
-best_fitness: 842.796
-current_iteration: 356
-last_update_iteration: 335
-current_time: 15.0236s
-last_update_time: 14.1104s
-largest_iteration_offset: 51
-stalled_iterations: 21
+Instance: 1
+best_fitness: 842.714
+current_iteration: 763
+last_update_iteration: 619
+current_time: 15.0035s
+last_update_time: 12.1372s
+largest_iteration_offset: 244
+stalled_iterations: 144
 path_relink_time: 0s
 num_path_relink_calls: 0
 num_homogenities: 0

@@ -1,19 +1,19 @@
 Custom stopping criteria not supplied by the user. Using max. time = 15s and max. stall_offset = 0
-Using 3 threads for decoding
+Using 1 threads for decoding
 TSP tour:
-0 72 16 26 56 25 58 39 11 6 20 21 4 22 46 17 36 42 30 38 31 49 50 44 67 69 18 41 1 61 28 9 73 65 19 55 43 53 68 59 64 70 7 8 3 62 60 74 34 52 24 5 10 14 47 51 27 33 40 54 37 15 45 48 2 35 57 63 23 29 71 32 13 66 12 
+0 72 56 26 42 25 59 11 2 4 20 21 53 34 22 58 39 17 30 19 46 38 49 50 44 18 67 69 41 1 28 9 73 55 61 31 43 68 36 70 7 16 3 29 62 8 64 6 74 52 24 14 5 51 65 47 10 27 33 54 40 15 37 45 48 35 57 63 60 32 23 71 13 66 12 
 Operations:
-0,72,26|26,4,22|22,46,42|42,31,49|49,44,67|67,69,1|1,9,73|73,19,43|43,53,68|68,70,60|60,24,5|5,10,47|47,51,27|27,33,40|40,54,37|37,15,45|45,48,35|35,57,23|23,29,32|32,13,66|66,12,75|
+0,72,42|42,4,17|17,19,38|38,44,18|18,69,1|1,9,73|73,55,61|61,70,16|16,29,6|6,24,51|51,65,47|47,10,27|27,33,40|40,15,37|37,48,35|35,57,63|63,32,71|71,13,66|66,12,75|
 method: rand_initPop
 seed: 2700001
-Instance: 3
-best_fitness: 762.192
-current_iteration: 359
-last_update_iteration: 339
-current_time: 15.0235s
-last_update_time: 14.1725s
-largest_iteration_offset: 21
-stalled_iterations: 20
+Instance: 1
+best_fitness: 683.837
+current_iteration: 737
+last_update_iteration: 728
+current_time: 15.0126s
+last_update_time: 14.8259s
+largest_iteration_offset: 28
+stalled_iterations: 9
 path_relink_time: 0s
 num_path_relink_calls: 0
 num_homogenities: 0
