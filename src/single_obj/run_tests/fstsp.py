@@ -28,7 +28,7 @@ exec_path = "../main_minimal"
 suffix = sys.argv[2]
 instances_path = "../../../tspd_instances/"
 tsp_solutions_path = "../../../fstsp_sol_" + suffix + '/'
-runtimes = [15, 30, 60, 120, 240]
+runtimes = [15, 30, 60, 90]
 threads = sys.argv[2]
 methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
 

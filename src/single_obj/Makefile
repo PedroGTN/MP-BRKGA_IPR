@@ -63,6 +63,14 @@ INCLUDES = \
 	-I. \
 	-I./brkga_mp_ipr
 
+LINKS = \
+	-L./discorde/lib/ -ldiscorde_cpp -ldiscorde \
+	-L/opt/concorde -lconcorde \
+	-L/opt/concorde/qsopt -l:qsopt.a \
+	-L/opt/ibm/ILOG/CPLEX_Studio2211/cplex/lib/x86-64_linux/static_pic \
+	-L/opt/ibm/ILOG/CPLEX_Studio2211/concert/lib/x86-64_linux/static_pic \
+	-lconcert -lilocplex -lcplex
+
 # Objects.
 OBJS = \
 	./tsp/tsp_instance.o \
@@ -71,7 +79,9 @@ OBJS = \
 	./decoders/Tspdsolver.o \
 	./decoders/Tspdproblem.o \
 	./decoders/Digrafo.o \
-	./decoders/tsp_decoder_pre_allocating.o
+	./source/discorde-cpp-api/discorde_cpp.o \
+	./source/discorde-c-api/discorde.o \
+	./decoders/tsp_decoder_pre_allocating.o 
 
 # Helpers.
 UTIL_OBJS = \
@@ -80,6 +90,9 @@ UTIL_OBJS = \
 # Main files.
 MAIN_MINIMAL_OBJ = main_minimal.o
 MAIN_MINIMAL_EXE = main_minimal
+
+MAIN_GENERATE_TOURS_OBJ = main_generate_tours.o
+MAIN_GENERATE_TOURS_EXE = main_generate_tours
 
 MAIN_MINIMAL_TSP_OBJ = main_minimal_tsp.o
 MAIN_MINIMAL_TSP_EXE = main_minimal_tsp
@@ -138,11 +151,16 @@ CXXFLAGS = $(USER_FLAGS)
 .PHONY: all clean
 .SUFFIXES: .cpp .o
 
-all: main_minimal main_complete main_minimal_tsp
+all: main_minimal main_generate_tours 
 
 main_minimal: $(OBJS) $(MAIN_MINIMAL_OBJ)
 	@echo "--> Linking objects... "
-	$(CXX) $(CXXFLAGS) $(OBJS) $(MAIN_MINIMAL_OBJ) -o $(MAIN_MINIMAL_EXE)
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LINKS) $(MAIN_MINIMAL_OBJ) -o $(MAIN_MINIMAL_EXE)
+	@echo
+
+main_generate_tours: $(OBJS) $(MAIN_GENERATE_TOURS_OBJ)
+	@echo "--> Linking objects... "
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LINKS) $(MAIN_GENERATE_TOURS_OBJ) -o $(MAIN_GENERATE_TOURS_EXE)
 	@echo
 
 main_minimal_tsp: $(OBJS) $(MAIN_MINIMAL_TSP_OBJ)
@@ -162,7 +180,7 @@ main_maximum_iterations: $(UTIL_OBJS) $(OBJS) $(MAIN_MAXIMUM_ITERATIONS_OBJ)
 
 .cpp.o:
 	@echo "--> Compiling $<..."
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(USER_DEFINES) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(LINKS) $(USER_DEFINES) -c $< -o $@
 	@echo
 
 clean:
