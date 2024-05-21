@@ -28,16 +28,16 @@ def sol2tikz(sol_loc, tikz_loc, inst_loc):
             nodes.remove(d.split(',')[1])
 
     for i in range(len(nodes)-1):
-        tikzfile.write("        \draw (" + nodes[i] + ") -- (" + nodes[i+1] + ");\n")
+        tikzfile.write("        \\draw (" + nodes[i] + ") -- (" + nodes[i+1] + ");\n")
 
-    tikzfile.write("        \draw (" + nodes[-1] + ") -- (" + nodes[0] + ");\n")
+    tikzfile.write("        \\draw (" + nodes[-1] + ") -- (" + nodes[0] + ");\n")
 
     for d in drone_path[:-1]:
         dnodes = d.split(',')
-        tikzfile.write("        \draw[dashed] (" + dnodes[0] + ") -- (" + dnodes[1] + ");\n")
-        tikzfile.write("        \draw[dashed] (" + dnodes[1] + ") -- (" + dnodes[2].replace("50", "0") + ");\n")
+        tikzfile.write("        \\draw[dashed] (" + dnodes[0] + ") -- (" + dnodes[1] + ");\n")
+        tikzfile.write("        \\draw[dashed] (" + dnodes[1] + ") -- (" + dnodes[2].replace("50", "0") + ");\n")
     
 
-    tikzfile.write("      \end{tikzpicture}\n"
-                    "\end{document}")
+    tikzfile.write("      \\end{tikzpicture}\n"
+                    "\\end{document}")
     return

@@ -5,6 +5,7 @@
 \begin{document}
       \begin{tikzpicture}[scale=0.4,cliente/.style={draw,circle,inner sep=2pt}, deposito/.style={draw,rectangle,inner sep=2pt}]
         \node[deposito] (0) at (3.3364517533730447,0.23630810140431485) {Depot};
+        \node[cliente] (46) at (3.8877033412300763,-0.7153924998313836) {46};
         \node[cliente] (27) at (0.14795767014011676,3.006594322507507) {27};
         \node[cliente] (21) at (1.688110095305078,4.116358437688567) {21};
         \node[cliente] (22) at (9.010635801178873,15.639052530469638) {22};
@@ -53,8 +54,8 @@
         \node[cliente] (3) at (-38.497045856792454,7.514441572550196) {3};
         \node[cliente] (34) at (-16.548879968566293,5.257042529128192) {34};
         \node[cliente] (16) at (-7.81975523578774,1.0761380272075596) {16};
-        \node[cliente] (46) at (3.8877033412300763,-0.7153924998313836) {46};
-        \draw (0) -- (27);
+        \draw (0) -- (46);
+        \draw (46) -- (27);
         \draw (27) -- (21);
         \draw (21) -- (22);
         \draw (22) -- (45);
@@ -89,8 +90,7 @@
         \draw (42) -- (3);
         \draw (3) -- (34);
         \draw (34) -- (16);
-        \draw (16) -- (46);
-        \draw (46) -- (0);
+        \draw (16) -- (0);
         \draw[dashed] (0) -- (6);
         \draw[dashed] (6) -- (47);
         \draw[dashed] (47) -- (25);
@@ -116,8 +116,6 @@
         \draw[dashed] (44) -- (8);
         \draw[dashed] (8) -- (36);
         \draw[dashed] (36) -- (23);
-        \draw[dashed] (23) -- (46);
-        \draw[dashed] (46) -- (-1);
-        \draw[dashed] (-1) -- (0);
+        \draw[dashed] (23) -- (0);
       \end{tikzpicture}
 \end{document}

@@ -27,7 +27,7 @@ sol_file_list.remove(csv_file_name)
 
 csv_file.write("num_nodes,instance_type,alpha,runtime,optimal_tsp_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n\n")
 
-num_list = [50, 100]
+num_list = [50, 75, 100]
 alphas = [1, 2, 3]
 runtimes = [15, 30, 60, 120, 240]
 
