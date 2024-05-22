@@ -316,7 +316,6 @@ int main(int argc, char* argv[]) {
             for(size_t j = 0; j < keys.size(); j++)
                 chromosome[tours[i][j]] = keys[j];
 
-            cout<<endl<<endl;
             cout<<"Instance: "<<instance_file<<endl;
             cout<<"optimal tsp sol cost: "<<tsp_decoder.decode(chromosome, false)<<endl;
         }
