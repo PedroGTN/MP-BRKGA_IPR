@@ -53,10 +53,10 @@ void printvec(vector<uint64_t> vec){
     cout<<endl;
 }
 
-void print_tour(vector<pair<arc*,int>> final_tour){
+void print_tour(vector<pair<arc*,int>> final_tour, int n){
 
-    for(uint64_t j=final_tour.size()-1; j>=0; j--){
-        cout<<final_tour[j].second<<","<<final_tour[j].first->drone_node<<","<<(final_tour[j].first->dest==100?0:final_tour[j].first->dest)<<"|";
+    for(int64_t j=(int64_t)final_tour.size()-1; j>=0; j--){
+        cout<<final_tour[j].second<<","<<final_tour[j].first->drone_node<<","<<(final_tour[j].first->dest==n?0:final_tour[j].first->dest)<<"|";
     }
 
     cout<<endl;
@@ -143,6 +143,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        cout.setstate(ios_base::failbit);
+
         auto end_matrix = chrono::high_resolution_clock::now();	
 
         // =========================================================================
@@ -177,7 +179,7 @@ int main(int argc, char* argv[]) {
 
         auto start_bol_el = chrono::high_resolution_clock::now();	
         vector<vector<uint64_t>> tours; 
-        vector<string> tour_names(instance.num_nodes);
+        vector<string> tour_names;
         vector<uint64_t> aux(instance.num_nodes);
         vector<uint64_t> aux2;
 
@@ -221,11 +223,13 @@ int main(int argc, char* argv[]) {
                     bolhas_elipticas_diretas(aux, instance, d);
                     tours.push_back(aux);
                     tour_names.push_back(tour_names[i] + "_BED_ORIG_" + to_string(d));
+                    tour_names.back().erase(tour_names.back().end()-4, tour_names.back().end());
 
                     aux = tours[i];
                     bolhas_elipticas_reversas(aux, instance, d);
                     tours.push_back(aux);
                     tour_names.push_back(tour_names[i] + "_BER_ORIG_" + to_string(d));
+                    tour_names.back().erase(tour_names.back().end()-4, tour_names.back().end());
 
                     //ordem inversa
                     aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
@@ -233,12 +237,14 @@ int main(int argc, char* argv[]) {
                     aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
                     tours.push_back(aux2);
                     tour_names.push_back(tour_names[i] + "_BED_INV_" + to_string(d));
-                
+                    tour_names.back().erase(tour_names.back().end()-4, tour_names.back().end());
+
                     aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
                     bolhas_elipticas_reversas(aux, instance, d);
                     aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
                     tours.push_back(aux2);
                     tour_names.push_back(tour_names[i] + "_BER_INV_" + to_string(d));
+                    tour_names.back().erase(tour_names.back().end()-4, tour_names.back().end());
                 }
             }
         }
@@ -253,27 +259,36 @@ int main(int argc, char* argv[]) {
 
         // cout<<endl;
 
+        // for(auto s : tour_names){
+        //     cout<<s<<endl;
+        // }
+
+        // for(int i=0; i<tour_names.size(); i++)
+        //     cout<<tour_names[i]<<endl;
+
         auto start_find_best = chrono::high_resolution_clock::now();	
 
         vector<double> sol_costs;
         uint64_t best = 0;
         vector<vector<pair<arc*,int>>> fstsp_tours;
+        vector<Digrafo> graphs(tours.size(), Digrafo(instance.getN()));
         for(uint64_t i=0; i<tours.size(); i++){
+
             // cout<<i<<": ";
             vector<int> permutation, predecessor;
-            Digrafo graph(instance.getN());
+            // Digrafo graph(instance.getN()); 
             // cout<<"TSP tour:\n";
             for(auto j : tours[i]) {
                 // cout<<j<<" ";
                 permutation.push_back(j);
             }
             // cout<<endl<<endl;
-            double cost = decoder.split_lazy(instance, permutation, predecessor, graph);
-
+            double cost = decoder.split_lazy(instance, permutation, predecessor, graphs[i]);
+            
             vector<pair<arc*,int>> final_tour;
             int ant = instance.getN();
             for(int j=predecessor[ant]; j>=0; j = predecessor[j]){
-                arc *a = graph.nodes[j];
+                arc *a = graphs[i].nodes[j];
                 final_tour.push_back(make_pair(a, j));
                 int len = final_tour.size()-1;
                 while(a->prox!=nullptr){
@@ -299,9 +314,20 @@ int main(int argc, char* argv[]) {
 
         auto end_find_best = chrono::high_resolution_clock::now();	
 
+        cout.clear();
+
+        cout<<endl;
+        std::chrono::duration<double> elapsed_seconds = end_lk - start_matrix;
+        cout<<"LKH ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
+        elapsed_seconds = end_cc - start_cc;
+        cout<<"TSP OPT SOL ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
+        elapsed_seconds = end_bol_el - start_bol_el;
+        cout<<"BOL_EL ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
+
 
         std::mt19937 rng(9);
-        for(uint64_t i=0; i<1; i++){
+        cout<<"Instance: "<<instance_file<<endl;
+        for(uint64_t i=0; i<2; i++){
 
             vector<double> keys(instance.num_nodes);
             for(auto& key : keys)
@@ -316,8 +342,7 @@ int main(int argc, char* argv[]) {
             for(size_t j = 0; j < keys.size(); j++)
                 chromosome[tours[i][j]] = keys[j];
 
-            cout<<"Instance: "<<instance_file<<endl;
-            cout<<"optimal tsp sol cost: "<<tsp_decoder.decode(chromosome, false)<<endl;
+            cout<<tour_names[i]<<" : TSP_COST : "<<tsp_decoder.decode(chromosome, false)<<endl;
         }
         cout<<"best fstsp sol name: "<<tour_names[best]<<endl;
         cout<<"best fstsp sol cost: "<<sol_costs[best]<<endl;
@@ -325,7 +350,7 @@ int main(int argc, char* argv[]) {
             cout<<tour_names[i]<<" : TSP_TOUR : ";
             printvec(tours[i]);
             cout<<tour_names[i]<<" : FSTSP_TOUR : ";
-            print_tour(fstsp_tours[i]);
+            print_tour(fstsp_tours[i], instance.getN());
             cout<<tour_names[i]<<" : FSTSP_COST : "<<sol_costs[i]<<endl;
         }
 

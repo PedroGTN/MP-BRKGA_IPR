@@ -25,6 +25,6 @@ for f in instances_folders:
             if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75):
                 solution_path = sol_by_folder_path + '/' + i[:-4] + '.sol'
 
-                comando = exec_path + " " + instance_path + " > " + solution_path + '&& rm *concorde_*'
+                comando = exec_path + " " + instance_path + " > " + solution_path + ' && rm *concorde_*'
                 print("Executing: " + str(comando))
                 os.system(str(comando))

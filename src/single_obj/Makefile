@@ -111,7 +111,7 @@ MAIN_MAXIMUM_ITERATIONS_EXE = main_maximum_iterations
 CXX = g++-12
 # CXX = clang++
 
-USER_FLAGS += -std=c++20 
+USER_FLAGS += -std=c++23 
 
 # Compiler flags for debugging
 ifneq ($(OPT), opt)

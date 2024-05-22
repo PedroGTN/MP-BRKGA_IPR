@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
           //   << endl;
 			 
 		
-		
+		double best = numeric_limits<double>::max();
 		{ // local scope to deallocate memory.
         // To inject the initial tour, we need to create chromosome representing
         // that solution. First, we create a set of keys to be used in the
@@ -259,7 +259,7 @@ int main(int argc, char* argv[]) {
         
         vector<BRKGA::Chromosome> chromosomes;
         std::mt19937 rng(seed);
-        double best = numeric_limits<double>::max();
+        
         for(uint64_t i=0; i<tours.size(); i++){
 
             vector<double> keys(instance.num_nodes);
@@ -279,7 +279,6 @@ int main(int argc, char* argv[]) {
 
             chromosomes.push_back(chromosome);
         }
-        cout<<"best warm start solution: "<<best<<endl;
 
         switch(method){
             case 0: 
@@ -302,6 +301,9 @@ int main(int argc, char* argv[]) {
         } // end local scope
 
         const auto final_status = algorithm.run(control_params, &cout);
+
+        cout<<"best warm start solution: "<<best<<endl;
+
 
         vector<pair<double, unsigned>> tour(instance.getN());
         for(unsigned i = 0; i < instance.getN(); ++i)
@@ -338,7 +340,7 @@ int main(int argc, char* argv[]) {
         cout<<"Operations:"<<endl;
 
         for(int i=(int)final_tour.size()-1; i>=0; i--){
-            cout<<final_tour[i].second<<","<<final_tour[i].first->drone_node<<","<<(final_tour[i].first->dest==100?0:final_tour[i].first->dest)<<"|";
+            cout<<final_tour[i].second<<","<<final_tour[i].first->drone_node<<","<<(final_tour[i].first->dest==instance.num_nodes?0:final_tour[i].first->dest)<<"|";
         }
         cout<<endl;
 
