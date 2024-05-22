@@ -53,6 +53,15 @@ void printvec(vector<uint64_t> vec){
     cout<<endl;
 }
 
+void print_tour(vector<pair<arc*,int>> final_tour){
+
+    for(uint64_t j=final_tour.size()-1; j>=0; j--){
+        cout<<final_tour[j].second<<","<<final_tour[j].first->drone_node<<","<<(final_tour[j].first->dest==100?0:final_tour[j].first->dest)<<"|";
+    }
+
+    cout<<endl;
+}
+
 uint64_t mergesort_countinv(vector<uint64_t> arr, vector<uint64_t> arr2)
 {
     uint64_t size = arr.size();
@@ -114,6 +123,9 @@ int main(int argc, char* argv[]) {
         Tspd_problem instance = Tspd_problem(instance_file);
         Tspd_solver decoder(instance);	 
 
+        TSP_Instance inst(instance_file);
+        TSP_Decoder tsp_decoder(inst);
+
         auto start_matrix = chrono::high_resolution_clock::now();		
 
         srand(0);
@@ -148,16 +160,9 @@ int main(int argc, char* argv[]) {
         lk_return = discorde::linkernighan_full(instance.num_nodes, cost_matrix, lk_tour, &lk_cost);
         auto end_lk = chrono::high_resolution_clock::now();		
 
-
-        cout << "lk tour: [ ";
-        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
-            cout << lk_tour[i] << " ";
-        }
-        cout << "]" << endl << endl;
-        cout << "Cost: " << lk_cost/SCALER << endl;
-        cout << "Is feasible? " << ((lk_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl << endl;
-
         // Allocate resources to store the solution from Concorde solver
+        auto start_cc = chrono::high_resolution_clock::now();		
+
         int* cc_tour = new int[instance.num_nodes];
         double cc_cost;
         int cc_return;
@@ -167,21 +172,17 @@ int main(int argc, char* argv[]) {
         // with Lin-Kernighan heuristic as a starting solution, if any was found)
         int* cc_start = (lk_return == DISCORDE_RETURN_OK ? lk_tour : NULL);
         cc_return = discorde::concorde_full(instance.num_nodes, cost_matrix, cc_tour, &cc_cost, &cc_status, cc_start);
-
-        cout<<"cc_return: "<<cc_return;
-        cout << "\ncc tour: [ ";
-        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
-            cout << cc_tour[i] << " ";
-        }
-        cout << "]" << endl;
-        cout << "Cost: " << cc_cost/SCALER << endl;
-        cout << "Is feasible? " << ((cc_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl;
-        cout << "Is optimal? " << ((cc_return == DISCORDE_RETURN_OK && cc_status == DISCORDE_STATUS_OPTIMAL) ? "yes" : "no") << endl << endl;
+        auto end_cc = chrono::high_resolution_clock::now();		
 
 
+        auto start_bol_el = chrono::high_resolution_clock::now();	
         vector<vector<uint64_t>> tours; 
+        vector<string> tour_names(instance.num_nodes);
         vector<uint64_t> aux(instance.num_nodes);
         vector<uint64_t> aux2;
+
+        tour_names.push_back("TSP_OPT");
+        tour_names.push_back("LKH_SOL");
 
 
         for(uint64_t i=0; i < instance.num_nodes; i++)
@@ -219,24 +220,31 @@ int main(int argc, char* argv[]) {
                     aux = tours[i];
                     bolhas_elipticas_diretas(aux, instance, d);
                     tours.push_back(aux);
+                    tour_names.push_back(tour_names[i] + "_BED_ORIG_" + to_string(d));
 
                     aux = tours[i];
                     bolhas_elipticas_reversas(aux, instance, d);
                     tours.push_back(aux);
+                    tour_names.push_back(tour_names[i] + "_BER_ORIG_" + to_string(d));
 
                     //ordem inversa
                     aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
                     bolhas_elipticas_diretas(aux, instance, d);
                     aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
                     tours.push_back(aux2);
+                    tour_names.push_back(tour_names[i] + "_BED_INV_" + to_string(d));
                 
                     aux.assign(1, 0); aux.insert(aux.end(), tours[i].rbegin(), tours[i].rend()-1);
                     bolhas_elipticas_reversas(aux, instance, d);
                     aux2.assign(1, 0); aux2.insert(aux2.end(), aux.rbegin(), aux.rend()-1);
                     tours.push_back(aux2);
+                    tour_names.push_back(tour_names[i] + "_BER_INV_" + to_string(d));
                 }
             }
         }
+
+        auto end_bol_el = chrono::high_resolution_clock::now();	
+
 
         // for(uint64_t i=2; i<tours.size(); i++) {
         //     cout<<i<<":  ";
@@ -245,10 +253,13 @@ int main(int argc, char* argv[]) {
 
         // cout<<endl;
 
-        double best = numeric_limits<double>::max();
+        auto start_find_best = chrono::high_resolution_clock::now();	
 
+        vector<double> sol_costs;
+        uint64_t best = 0;
+        vector<vector<pair<arc*,int>>> fstsp_tours;
         for(uint64_t i=0; i<tours.size(); i++){
-            cout<<i<<": ";
+            // cout<<i<<": ";
             vector<int> permutation, predecessor;
             Digrafo graph(instance.getN());
             // cout<<"TSP tour:\n";
@@ -276,18 +287,48 @@ int main(int argc, char* argv[]) {
                 ant = j;
             }
 
-            // cout<<"Operations:"<<endl;
+            fstsp_tours.push_back(final_tour);
 
-            // for(int j=(int)final_tour.size()-1; j>=0; j--){
-            //     cout<<final_tour[j].second<<","<<final_tour[j].first->drone_node<<","<<(final_tour[j].first->dest==100?0:final_tour[j].first->dest)<<"|";
-            // }
-            cout<<cost<<endl;
-            best = min(best, cost);
+            // cout<<cost<<endl;
+            sol_costs.push_back(cost);
+
+            if(sol_costs[best]>sol_costs[i])
+                best = i;
+            
         }
 
-        cout<<endl<<endl;
-        cout<<"Instance: "<<instance_file<<endl;
-        cout<<"best cost: "<<best<<endl;
+        auto end_find_best = chrono::high_resolution_clock::now();	
+
+
+        std::mt19937 rng(9);
+        for(uint64_t i=0; i<1; i++){
+
+            vector<double> keys(instance.num_nodes);
+            for(auto& key : keys)
+                key = generate_canonical<double, numeric_limits<double>::digits>(rng);
+            
+
+            sort(keys.begin(), keys.end());
+
+            // Then, we visit each node in the tour and assign to it a key.
+            BRKGA::Chromosome chromosome(instance.num_nodes);
+
+            for(size_t j = 0; j < keys.size(); j++)
+                chromosome[tours[i][j]] = keys[j];
+
+            cout<<endl<<endl;
+            cout<<"Instance: "<<instance_file<<endl;
+            cout<<"optimal tsp sol cost: "<<tsp_decoder.decode(chromosome, false)<<endl;
+        }
+        cout<<"best fstsp sol name: "<<tour_names[best]<<endl;
+        cout<<"best fstsp sol cost: "<<sol_costs[best]<<endl;
+        for(uint64_t i=0; i<tours.size(); i++){
+            cout<<tour_names[i]<<" : TSP_TOUR : ";
+            printvec(tours[i]);
+            cout<<tour_names[i]<<" : FSTSP_TOUR : ";
+            print_tour(fstsp_tours[i]);
+            cout<<tour_names[i]<<" : FSTSP_COST : "<<sol_costs[i]<<endl;
+        }
 
 
         for (uint64_t i = 0; i < instance.num_nodes; ++i) {
