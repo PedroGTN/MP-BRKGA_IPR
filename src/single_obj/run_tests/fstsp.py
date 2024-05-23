@@ -60,7 +60,7 @@ for t in runtimes:
                 if not os.path.exists(sol_by_inst_path):
                         os.mkdir(sol_by_inst_path)
                 
-                for m in methods[1:-1]:
+                for m in methods[2:]:
                     sol_by_method_path = sol_by_inst_path + '/' + m[0]
 
                     if not os.path.exists(sol_by_method_path):
