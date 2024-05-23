@@ -1,38 +1,6 @@
-WARNING: Large edge lengths in sparse graph
-Default Edge Length: 8388607
-WARNING: Large edge lengths in sparse graph
-Default Edge Length: 8388607
-CCtsp_solve_dat ...
-Set initial upperbound to 1121112 (from tour)
-Upperbound from x-heuristic: 1120272.00
-Exact lower bound: 1117640.000484
-DIFF: 0.000000
-LOWER BOUND: 1117640.000484   ACTIVE NODES: 1
-
-Task 0: Branching on node 0
-CClp_getweight ...
-BBnode 0 split into 1 (1117996.09) 2 (1118343.14) (0.04 seconds)
-LOWER BOUND: 1117996.093750   ACTIVE NODES: 2
-
-Task 1: Cutting on node 1
-New upperbound from x-heuristic: 1118944.00
-TOUR FOUND - upperbound is 1118944.00
-Writing Pool: 129 cuts
-BBnode 1 (now 3) can be pruned: upperbound 1118944.00 (0.03 seconds)
-LOWER BOUND: 1118343.142857   ACTIVE NODES: 1
-
-Task 2: Cutting on node 2
-Writing Pool: 148 cuts
-BBnode 2 (now 4) can be pruned: upperbound 1118944.00 (0.06 seconds)
-
-Task 3: Exit
-Total number of nodes in search tree: 3
-Optimal tour: 1118944
-Total Time to solve TSP: 1.10
-
-LKH ELAPSED TIME: 0.00355015
-TSP OPT SOL ELAPSED TIME: 1.30644
-BOL_EL ELAPSED TIME: 0.000853088
+LKH ELAPSED TIME: 0.00181814
+TSP OPT SOL ELAPSED TIME: 0.899025
+BOL_EL ELAPSED TIME: 0.00126592
 Instance: ../../../tspd_instances/singlecenter/singlecenter-alpha_1-87-n75.txt
 TSP_OPT : TSP_COST : 1118.94
 LKH_SOL : TSP_COST : 1121.11

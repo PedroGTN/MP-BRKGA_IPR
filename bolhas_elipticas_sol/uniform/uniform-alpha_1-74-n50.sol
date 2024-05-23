@@ -1,20 +1,6 @@
-Default Edge Length: 6611600
-Default Edge Length: 6611600
-CCtsp_solve_dat ...
-Set initial upperbound to 589171 (from tour)
-infeas_recover ...
-phase 1 addbad_variables
-LP is now feasible
-Recovered a feasible LP
-Exact lower bound: 589171.000000
-DIFF: 0.000000
-Established Bound: 589171
-Optimal tour: 589171
-Total Time to solve TSP: 0.00
-
-LKH ELAPSED TIME: 0.000781489
-TSP OPT SOL ELAPSED TIME: 0.0190326
-BOL_EL ELAPSED TIME: 0.000343195
+LKH ELAPSED TIME: 0.000710227
+TSP OPT SOL ELAPSED TIME: 0.00735554
+BOL_EL ELAPSED TIME: 0.000279764
 Instance: ../../../tspd_instances/uniform/uniform-alpha_1-74-n50.txt
 TSP_OPT : TSP_COST : 589.171
 LKH_SOL : TSP_COST : 589.171

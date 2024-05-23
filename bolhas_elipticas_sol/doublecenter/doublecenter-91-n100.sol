@@ -1,24 +1,6 @@
-WARNING: Large edge lengths in sparse graph
-Default Edge Length: 8388607
-WARNING: Large edge lengths in sparse graph
-Default Edge Length: 8388607
-CCtsp_solve_dat ...
-Set initial upperbound to 1739232 (from tour)
-infeas_recover ...
-phase 1 addbad_variables
-LP is now feasible
-Recovered a feasible LP
-recomputing rownorms ...
-Upperbound from x-heuristic: 1724265.00
-Exact lower bound: 1724265.000000
-DIFF: 0.000000
-Established Bound: 1724265
-Optimal tour: 1724265
-Total Time to solve TSP: 0.16
-
-LKH ELAPSED TIME: 0.00360055
-TSP OPT SOL ELAPSED TIME: 0.200277
-BOL_EL ELAPSED TIME: 0.00112038
+LKH ELAPSED TIME: 0.00277592
+TSP OPT SOL ELAPSED TIME: 0.10467
+BOL_EL ELAPSED TIME: 0.000966335
 Instance: ../../../tspd_instances/doublecenter/doublecenter-91-n100.txt
 TSP_OPT : TSP_COST : 1724.27
 LKH_SOL : TSP_COST : 1739.24

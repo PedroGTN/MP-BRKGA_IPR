@@ -1,18 +1,6 @@
-Default Edge Length: 6232850
-Default Edge Length: 6232850
-CCtsp_solve_dat ...
-Set initial upperbound to 586346 (from tour)
-recomputing rownorms ...
-Upperbound from x-heuristic: 586127.00
-Exact lower bound: 586127.000000
-DIFF: 0.000000
-Established Bound: 586127
-Optimal tour: 586127
-Total Time to solve TSP: 0.03
-
-LKH ELAPSED TIME: 0.00102969
-TSP OPT SOL ELAPSED TIME: 0.105668
-BOL_EL ELAPSED TIME: 0.000418794
+LKH ELAPSED TIME: 0.000773436
+TSP OPT SOL ELAPSED TIME: 0.0196571
+BOL_EL ELAPSED TIME: 0.000298367
 Instance: ../../../tspd_instances/uniform/uniform-alpha_1-76-n50.txt
 TSP_OPT : TSP_COST : 586.128
 LKH_SOL : TSP_COST : 586.348
