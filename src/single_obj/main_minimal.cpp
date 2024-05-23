@@ -177,14 +177,14 @@ int main(int argc, char* argv[]) {
         // Solve the problem
         // =========================================================================
 
-        fpos_t pos;
-        fgetpos(stdout, &pos);  // save the position in the file stream
-        int fd = dup(fileno(stdout));  // use the dup() function to create a copy of stdou
-        freopen("/dev/null", "w", stdout);
+        // fpos_t pos;
+        // fgetpos(stdout, &pos);  // save the position in the file stream
+        // int fd = dup(fileno(stdout));  // use the dup() function to create a copy of stdou
+        // freopen("/dev/null", "w", stdout);
         
-        int fde = ::open("/dev/null", O_WRONLY);
-        ::dup2(fde, 2);
-        ::close(fde);
+        // int fde = ::open("/dev/null", O_WRONLY);
+        // ::dup2(fde, 2);
+        // ::close(fde);
 
 
         // Allocate resources to store the solution from Lin-Kernighan heuristic
@@ -214,12 +214,12 @@ int main(int argc, char* argv[]) {
         int* cc_start = (lk_return == DISCORDE_RETURN_OK ? lk_tour : NULL);
         cc_return = discorde::concorde_full(instance.num_nodes, cost_matrix, cc_tour, &cc_cost, &cc_status, cc_start);
 
-        fflush(stdout);   
-        dup2(fd, fileno(stdout));  // restore the stdout
-        close(fd);
-        clearerr(stdout);  
+        // fflush(stdout);   
+        // dup2(fd, fileno(stdout));  // restore the stdout
+        // close(fd);
+        // clearerr(stdout);  
 
-        fsetpos(stdout, &pos); // move to the correct position
+        // fsetpos(stdout, &pos); // move to the correct position
 
         // cout<<"cc_return: "<<cc_return;
         // cout << "\ncc tour: [ ";
