@@ -42,6 +42,10 @@
 #include <string>
 #include <random>
 #include <queue>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -143,13 +147,20 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        cout.setstate(ios_base::failbit);
-
         auto end_matrix = chrono::high_resolution_clock::now();	
 
         // =========================================================================
         // Solve the problem
         // =========================================================================
+
+        fpos_t pos;
+        fgetpos(stdout, &pos);  // save the position in the file stream
+        int fd = dup(fileno(stdout));  // use the dup() function to create a copy of stdou
+        freopen("/dev/null", "w", stdout);
+        
+        int fde = ::open("/dev/null", O_WRONLY);
+        ::dup2(fde, 2);
+        ::close(fde);
 
         // Allocate resources to store the solution from Lin-Kernighan heuristic
         auto start_lk = chrono::high_resolution_clock::now();		
@@ -176,6 +187,13 @@ int main(int argc, char* argv[]) {
         cc_return = discorde::concorde_full(instance.num_nodes, cost_matrix, cc_tour, &cc_cost, &cc_status, cc_start);
         auto end_cc = chrono::high_resolution_clock::now();		
 
+        
+        fflush(stdout);   
+        dup2(fd, fileno(stdout));  // restore the stdout
+        close(fd);
+        clearerr(stdout);  
+
+        fsetpos(stdout, &pos); // move to the correct position
 
         auto start_bol_el = chrono::high_resolution_clock::now();	
         vector<vector<uint64_t>> tours; 
@@ -314,9 +332,6 @@ int main(int argc, char* argv[]) {
 
         auto end_find_best = chrono::high_resolution_clock::now();	
 
-        cout.clear();
-
-        cout<<endl;
         std::chrono::duration<double> elapsed_seconds = end_lk - start_matrix;
         cout<<"LKH ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
         elapsed_seconds = end_cc - start_cc;

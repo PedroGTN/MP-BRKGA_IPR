@@ -41,6 +41,10 @@
 #include <stdexcept>
 #include <string>
 #include <random>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -101,6 +105,7 @@ int main(int argc, char* argv[]) {
         ////////////////////////////////////////
         // Read command-line arguments and the instance
         ////////////////////////////////////////
+        auto start = chrono::high_resolution_clock::now();
 
         const unsigned seed = stoi(argv[1]);
         const string config_file = argv[2];
@@ -172,6 +177,16 @@ int main(int argc, char* argv[]) {
         // Solve the problem
         // =========================================================================
 
+        fpos_t pos;
+        fgetpos(stdout, &pos);  // save the position in the file stream
+        int fd = dup(fileno(stdout));  // use the dup() function to create a copy of stdou
+        freopen("/dev/null", "w", stdout);
+        
+        int fde = ::open("/dev/null", O_WRONLY);
+        ::dup2(fde, 2);
+        ::close(fde);
+
+
         // Allocate resources to store the solution from Lin-Kernighan heuristic
         int* lk_tour = new int[instance.num_nodes];
         double lk_cost;
@@ -180,13 +195,13 @@ int main(int argc, char* argv[]) {
         // Solve the problem using Lin-Kernighan heuristic
         lk_return = discorde::linkernighan_full(instance.num_nodes, cost_matrix, lk_tour, &lk_cost);
 
-        cout << "lk tour: [ ";
-        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
-            cout << lk_tour[i] << " ";
-        }
-        cout << "]" << endl << endl;
-        cout << "Cost: " << lk_cost/SCALER << endl;
-        cout << "Is feasible? " << ((lk_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl << endl;
+        // cout << "lk tour: [ ";
+        // for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+        //     cout << lk_tour[i] << " ";
+        // }
+        // cout << "]" << endl << endl;
+        // cout << "Cost: " << lk_cost/SCALER << endl;
+        // cout << "Is feasible? " << ((lk_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl << endl;
 
         // Allocate resources to store the solution from Concorde solver
         int* cc_tour = new int[instance.num_nodes];
@@ -199,15 +214,22 @@ int main(int argc, char* argv[]) {
         int* cc_start = (lk_return == DISCORDE_RETURN_OK ? lk_tour : NULL);
         cc_return = discorde::concorde_full(instance.num_nodes, cost_matrix, cc_tour, &cc_cost, &cc_status, cc_start);
 
-        cout<<"cc_return: "<<cc_return;
-        cout << "\ncc tour: [ ";
-        for (uint64_t i = 0; i < instance.num_nodes; ++i) {
-            cout << cc_tour[i] << " ";
-        }
-        cout << "]" << endl;
-        cout << "Cost: " << cc_cost/SCALER << endl;
-        cout << "Is feasible? " << ((cc_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl;
-        cout << "Is optimal? " << ((cc_return == DISCORDE_RETURN_OK && cc_status == DISCORDE_STATUS_OPTIMAL) ? "yes" : "no") << endl << endl;
+        fflush(stdout);   
+        dup2(fd, fileno(stdout));  // restore the stdout
+        close(fd);
+        clearerr(stdout);  
+
+        fsetpos(stdout, &pos); // move to the correct position
+
+        // cout<<"cc_return: "<<cc_return;
+        // cout << "\ncc tour: [ ";
+        // for (uint64_t i = 0; i < instance.num_nodes; ++i) {
+        //     cout << cc_tour[i] << " ";
+        // }
+        // cout << "]" << endl;
+        // cout << "Cost: " << cc_cost/SCALER << endl;
+        // cout << "Is feasible? " << ((cc_return == DISCORDE_RETURN_OK) ? "yes" : "no") << endl;
+        // cout << "Is optimal? " << ((cc_return == DISCORDE_RETURN_OK && cc_status == DISCORDE_STATUS_OPTIMAL) ? "yes" : "no") << endl << endl;
 
 
         vector<vector<uint64_t>> tours; 
@@ -300,8 +322,12 @@ int main(int argc, char* argv[]) {
 		
         } // end local scope
 
+        auto end = chrono::high_resolution_clock::now();
+
         const auto final_status = algorithm.run(control_params, &cout);
 
+        std::chrono::duration<double> elapsed_seconds = end - start;
+        cout<<"initialization time: "<<elapsed_seconds.count()<<endl;
         cout<<"best warm start solution: "<<best<<endl;
 
 
