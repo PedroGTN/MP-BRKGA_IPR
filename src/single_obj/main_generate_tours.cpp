@@ -338,6 +338,8 @@ int main(int argc, char* argv[]) {
         cout<<"TSP OPT SOL ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
         elapsed_seconds = end_bol_el - start_bol_el;
         cout<<"BOL_EL ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
+        elapsed_seconds = end_find_best - start_find_best;
+        cout<<"FIND_BEST ELAPSED TIME: "<<elapsed_seconds.count()<<endl;
 
 
         std::mt19937 rng(9);
