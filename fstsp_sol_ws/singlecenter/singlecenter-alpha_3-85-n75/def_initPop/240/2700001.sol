@@ -1,0 +1,26 @@
+Custom stopping criteria not supplied by the user. Using max. time = 240s and max. stall_offset = 0
+Using 1 threads for decoding
+initialization time: 0.0323967
+best warm start solution: 651.195
+TSP tour:
+0 17 45 2 6 12 18 69 16 31 1 58 42 13 32 68 37 27 25 21 44 60 19 49 15 30 28 22 57 64 43 24 35 73 48 39 47 71 53 65 5 7 8 38 34 36 63 23 14 26 70 61 9 29 3 20 46 52 50 11 59 74 33 66 51 62 4 10 40 41 72 54 67 55 56 
+Operations:
+0,17,45|45,2,12|12,18,69|69,16,31|31,1,58|58,42,13|13,32,68|68,37,27|27,25,21|21,57,64|64,43,35|35,73,48|48,39,47|47,71,53|53,65,5|5,7,8|8,38,34|34,36,63|63,23,26|26,70,61|61,9,29|29,20,46|46,52,50|50,11,59|59,74,33|33,66,51|51,62,4|4,10,40|40,41,72|72,54,67|67,55,0|
+method: def_initPop
+seed: 2700001
+Instance: 1
+best_fitness: 512.919
+current_iteration: 12346
+last_update_iteration: 1644
+current_time: 240.005s
+last_update_time: 31.9831s
+largest_iteration_offset: 1032
+stalled_iterations: 10702
+path_relink_time: 0s
+num_path_relink_calls: 0
+num_homogenities: 0
+num_best_improvements: 0
+num_elite_improvements: 0
+num_exchanges: 0
+num_shakes: 0
+num_resets: 0
