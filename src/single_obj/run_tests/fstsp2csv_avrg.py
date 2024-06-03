@@ -29,7 +29,7 @@ csv_file.write("num_nodes,instance_type,alpha,runtime,optimal_tsp_solution,best_
 
 num_list = [50, 75, 100]
 alphas = [1, 2, 3]
-runtimes = [15, 30, 60, 120, 240]
+runtimes = [15, 30, 60, 120]
 
 for inst_type in sol_file_list:
     inst_list = os.listdir(inst_type + '/')
@@ -122,8 +122,8 @@ for inst_type in sol_file_list:
                                 largest_iteration_offset += float(lines[-10].split()[-1])
                                 media += 1
 
-                csv_file.write( ("{:.4f}".format(optimal_solution/media_tsp)) + ',' + ("{:.4f}".format(best_fitness/media)) + ',' + ("{:.4f}".format((best_fitness/media) - optimal_solution/media_tsp)) + ',' + ("{:.4f}".format(((best_fitness/media)/(optimal_solution/media_tsp))*100)) + '%,' + ("{:.4f}".format(current_iteration/media)) + ',' + ("{:.4f}".format(last_update_iteration/media)) + ',' + ("{:.4f}".format(current_time/media)) + ','+ ("{:.4f}".format(last_update_time/media)) + ',' + ("{:.4f}".format(stalled_iterations/media)) + ',' + ("{:.4f}".format(largest_iteration_offset/media)) + "\n")
-                if(rtime == 240):
+                csv_file.write( ("{:.4f}".format(optimal_solution/media_tsp)) + ',' + ("{:.4f}".format(best_fitness/media)) + ',' + ("{:.4f}".format((best_fitness/media) - optimal_solution/media_tsp)) + ',' + ("{:.4f}".format((((best_fitness/media)-(optimal_solution/media_tsp))/(optimal_solution/media_tsp))*100)) + '%,' + ("{:.4f}".format(current_iteration/media)) + ',' + ("{:.4f}".format(last_update_iteration/media)) + ',' + ("{:.4f}".format(current_time/media)) + ','+ ("{:.4f}".format(last_update_time/media)) + ',' + ("{:.4f}".format(stalled_iterations/media)) + ',' + ("{:.4f}".format(largest_iteration_offset/media)) + "\n")
+                if(rtime == runtimes[-1]):
                     csv_file.write('\n')
                     if(alpha == 3):
                       csv_file.write('\n')
