@@ -5,6 +5,7 @@
 
 ./main_minimal 2700001 config-basic.conf 10 1 2 ../../tspd_instances/uniform/uniform-98-n100.txt
 ./main_minimal 2700001 config-basic.conf 10 1 2 ../../tspd_instances/singlecenter/singlecenter-98-n100.txt
+./main_minimal 2700001 config.conf 20 1 2 ../../tspd_instances/doublecenter/doublecenter-98-n100.txt
 ./main_generate_tours ../../tspd_instances/uniform/uniform-51-n10.txt
 
 ./main_minimal_tsp 2700001 config-basic.conf 5 1 1 ../../tspd_instances/doublecenter/doublecenter-71-n50.txt

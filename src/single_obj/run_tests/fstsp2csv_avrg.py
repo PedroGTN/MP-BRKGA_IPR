@@ -29,7 +29,7 @@ csv_file.write("num_nodes,instance_type,alpha,runtime,optimal_tsp_solution,best_
 
 num_list = [50, 75, 100]
 alphas = [1, 2, 3]
-runtimes = [15, 30, 60, 120]
+runtimes = [15, 30, 60, 120, 240]
 
 for inst_type in sol_file_list:
     inst_list = os.listdir(inst_type + '/')
