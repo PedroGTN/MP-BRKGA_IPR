@@ -1,8 +1,12 @@
 import os
 import sys
 from multiprocessing import Pool
+from time import sleep
+import subprocess
+import threading
 
-# python3 run_tsp_d.py  60 1
+
+# python3 run_tsp_d.py threads suffix
 
 if len(sys.argv) == 2 and sys.argv[1] == "help":
     print("python3 run_brkga.py <num threads> <suffix>" + \
@@ -20,6 +24,7 @@ if len(sys.argv) < 3:
 def execute(comando):
     print("Executing: " + str(comando))
     os.system(str(comando))
+    sGlobal.release()
 
 
 exec_path = "../main_minimal"
@@ -42,6 +47,9 @@ seeds = seeds_file.readlines()
 
 instances_folders = os.listdir(instances_path)
 
+children = []
+global sGlobal
+sGlobal = threading.Semaphore(threads)
 
 for t in runtimes:
     for f in instances_folders:
@@ -80,14 +88,26 @@ for t in runtimes:
                         realruntime = str(t) if int(num_nodes[-1][1:-4]) > 30 else '5'
                         # print(solution_path)
                         exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
-                        " 1 " + str(m[1]) + " " + instance_path + " > " + solution_path + '&& rm *concorde_*'
+                        " 1 " + str(m[1]) + " " + instance_path + " > " + solution_path# + 'rm *concorde_*'
 
                         if(not os.path.isfile(solution_path)):
-                            command_list.append(exec_command)
+                            if sGlobal._value == 0:
+                                 sleep(2)
+                                 os.system('rm *concorde_*')
+                            sGlobal.acquire()
+                            c = threading.Thread(target=execute, args=(exec_command,))
+                            children.append(c)
+                            c.start()
+                            sleep(1)
+                            # command_list.append(exec_command)
                         
-                        if len(command_list) == threads:
-                            pool.map(execute, command_list)
-                            command_list.clear()
+                        # if len(command_list) == threads:
+                        #     pool.map(execute, command_list)
+                        #     command_list.clear()
+
+for c in children:
+        c.join()
 
 seeds_file.close()
+os.system('rm *concorde_*')
 

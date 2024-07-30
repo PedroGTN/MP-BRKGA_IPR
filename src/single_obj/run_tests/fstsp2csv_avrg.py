@@ -89,7 +89,14 @@ for inst_type in sol_file_list:
                             if(int(t) != rtime):
                                 continue
 
-                            optimal_solution += opt_sol(instance_loc, sol_file_loc)
+                            real_sol_loc = sol_file_loc
+
+                            if(real_sol_loc.split('-')[1][:-2] == 'alpha'):
+                                real_sol_loc = real_sol_loc.split('-')[0] + '-' + real_sol_loc.split('-')[2] + '-' + real_sol_loc.split('-')[3] + '-' + real_sol_loc.split('-')[-1]
+
+                            optimal_solution += opt_sol(instance_loc, real_sol_loc)
+
+
                             media_tsp += 1
 
                             tikz_runtime_loc = tikz_mode_loc + t + '/'

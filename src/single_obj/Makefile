@@ -78,6 +78,7 @@ OBJS = \
 	./decoders/tsp_decoder.o \
 	./decoders/Tspdsolver.o \
 	./decoders/Tspdproblem.o \
+	./avaliador/avaliador.o \
 	./decoders/Digrafo.o \
 	./source/discorde-cpp-api/discorde_cpp.o \
 	./source/discorde-c-api/discorde.o \

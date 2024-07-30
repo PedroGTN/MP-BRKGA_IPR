@@ -22,6 +22,7 @@ public:
 	vector<double> positions;
 	vector<vector<double>> distances;
 
+	Tspd_problem(){}
 	Tspd_problem(const std::string& filename);
 	virtual ~Tspd_problem();
 

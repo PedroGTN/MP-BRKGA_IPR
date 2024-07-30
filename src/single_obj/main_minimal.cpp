@@ -35,6 +35,7 @@
 #include "heuristics/greedy_tour.hpp"
 #include "source/discorde-cpp-api/discorde_cpp.h"
 #include "heuristics/bolhas_elipticas.hpp"
+#include "avaliador/avaliador.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -377,6 +378,13 @@ int main(int argc, char* argv[]) {
         << "\nInstance: "<< argv[4]
         << final_status
         << endl;
+
+        cout<<"avaliando...\n";
+        avaliador aval(permutation, final_status.best_fitness, instance_file);
+        cout<<"avaliando...\n";
+        cout << (aval.verificar()?"true":"false") << endl;
+        
+
 
     }
     catch(exception& e) {
