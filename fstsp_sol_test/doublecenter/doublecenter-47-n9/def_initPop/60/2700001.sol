@@ -1,0 +1,26 @@
+Custom stopping criteria not supplied by the user. Using max. time = 5s and max. stall_offset = 0
+Using 1 threads for decoding
+initialization time: 0.00147685
+best warm start solution: 628.588
+TSP tour:
+0 6 8 7 2 3 1 5 4 
+Operations:
+0,6,7|7,2,3|3,1,5|5,4,0|
+method: def_initPop
+seed: 2700001
+Instance: 1
+best_fitness: 608.702
+current_iteration: 1500
+last_update_iteration: 2
+current_time: 5.00026s
+last_update_time: 0.00612437s
+largest_iteration_offset: 1
+stalled_iterations: 1498
+path_relink_time: 0s
+num_path_relink_calls: 0
+num_homogenities: 0
+num_best_improvements: 0
+num_elite_improvements: 0
+num_exchanges: 0
+num_shakes: 0
+num_resets: 0

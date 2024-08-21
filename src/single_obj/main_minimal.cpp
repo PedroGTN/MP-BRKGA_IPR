@@ -336,7 +336,16 @@ int main(int argc, char* argv[]) {
         for(unsigned i = 0; i < instance.getN(); ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);
 
+        for(unsigned i = 0; i < instance.getN(); ++i)
+            cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
+        cout<<endl;
+
         sort(tour.begin()+1, tour.end());
+
+        for(unsigned i = 0; i < instance.getN(); ++i)
+            cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
+        cout<<endl;
+
         vector<int> permutation, predecessor;
         Digrafo graph(instance.getN());
         cout<<"TSP tour:\n";
@@ -344,23 +353,49 @@ int main(int argc, char* argv[]) {
             cout<<i.second<<" ";
             permutation.push_back(i.second);
         }
+        cout<<"permutation:\n";
+        for(int i=0; i<instance.getN(); i++)
+            cout<<permutation[i]<<" ";
         cout<<endl;
-        decoder.split_lazy(instance, permutation, predecessor, graph);
+
+        cout<<endl;
+        double check = decoder.split_lazy(instance, permutation);
+        cout<<"valor do best_chormossome = "<<check<<endl;
+        check = decoder.split_lazy(instance, permutation, predecessor, graph);
+        cout<<"valor do best_chormossome2 = "<<check<<endl;
+
+
+        
+        // cout<<"digrafo auxiliar:\n";
+        // cout<<"(dest, cost, drone_node)\n";
+        // for(int i=0; i<permutation.size(); i++){
+        //     cout<<permutation[i]<<": ";
+        //     for(arc *a = graph.nodes[permutation[i]]; a != nullptr; a = a->prox){
+        //         cout<<"("<<a->dest<<", "<<a->cost<<", "<<a->drone_node<<"), ";
+        //     }
+        //     cout<<endl; 
+        // }
+
+        // cout<<"Predecessor:\n";
+        // for(int i=0; i<permutation.size(); i++){
+        //     cout<<permutation[i]<<": "<<predecessor[permutation[i]]<<endl;
+        // }
+        // cout<<instance.getN()<<": "<<predecessor[instance.getN()]<<endl;
 
         vector<pair<arc*,int>> final_tour;
         int ant = instance.getN();
         for(int i=predecessor[ant]; i>=0; i = predecessor[i]){
             arc *a = graph.nodes[i];
-            final_tour.push_back(make_pair(a, i));
-            int len = final_tour.size()-1;
-            while(a->prox!=nullptr){
+            arc* min_arc = a;
+            while(a!=nullptr){
 
-                if((a->dest == ant && a->cost < final_tour[len].first->cost) || (a->dest == ant && final_tour[len].first->dest != ant)){
-                    final_tour[len] = make_pair(a, i);
+                if((a->dest == ant && a->cost < min_arc->cost) || (a->dest == ant && min_arc->dest != ant)){
+                    min_arc = a;
                 }
                 
                 a = a->prox;
             }
+            final_tour.push_back(make_pair(min_arc, i));
             ant = i;
         }
 
@@ -378,13 +413,6 @@ int main(int argc, char* argv[]) {
         << "\nInstance: "<< argv[4]
         << final_status
         << endl;
-
-        cout<<"avaliando...\n";
-        avaliador aval(permutation, final_status.best_fitness, instance_file);
-        cout<<"avaliando...\n";
-        cout << (aval.verificar()?"true":"false") << endl;
-        
-
 
     }
     catch(exception& e) {

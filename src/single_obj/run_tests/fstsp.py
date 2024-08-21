@@ -31,7 +31,8 @@ exec_path = "../main_minimal"
 suffix = sys.argv[2]
 instances_path = "../../../tspd_instances/"
 tsp_solutions_path = "../../../fstsp_sol_" + suffix + '/'
-runtimes = [15, 30, 60, 120, 240]
+# runtimes = [15, 30, 60, 120, 240]
+runtimes = [60]
 threads = int(sys.argv[1])
 methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
 
@@ -63,7 +64,7 @@ for t in runtimes:
         for i in instances_file_list:    
             instance_path = instances_folder_especific + i
             num_nodes = instance_path.split('-')
-            if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75):
+            if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75) or int(num_nodes[-1][1:-4])==9:
                 sol_by_inst_path = sol_by_folder_path + '/' + i[:-4]
                 if not os.path.exists(sol_by_inst_path):
                         os.mkdir(sol_by_inst_path)

@@ -38,7 +38,8 @@ double avaliador::avaliar(){
 }
 
 bool avaliador::verificar(){
-    bool flag = this->og_tour_value == this->tour_value;
+    bool flag;// = this->og_tour_value == this->tour_value;
+    //og <= tv + Epsilon && og >= tv - Epsilon
 
     flag = og_tour[0] == 0;
 
@@ -46,7 +47,7 @@ bool avaliador::verificar(){
 
     for(int i=0; i<this->instance.getN(); i++){
         nodes[og_tour[i]] += 1;
-        flag = nodes[og_tour[i]] < 2;
+        flag &= nodes[og_tour[i]] < 2;
     }
 
     return flag;

@@ -2,6 +2,8 @@ import os
 from opt_sol import opt_sol
 from sol2tikz import sol2tikz
 import sys
+from Init_avaliador import init_avaliador
+
 
 #nome inst, num nodes, double/single/uniform, best_fitness, current_iteration, last_update_iteration, last_update_time, stalled_iterations, largest_iteration_offset
 
@@ -27,7 +29,9 @@ sol_file_list.remove(csv_file_name)
 
 csv_file.write("instance_name,num_nodes,instance_type,alpha,optimal_tsp_solution,best_fitness,opt_to_fit_dist,opt_to_fit_percent,current_iteration,last_update_iteration,current_time,last_update_time,stalled_iterations,largest_iteration_offset\n\n")
 
-num_list = [50, 100]
+# num_list = [9, 50, 75, 100]
+
+num_list = [9]
 
 for inst_type in sol_file_list:
     inst_list = os.listdir(inst_type + '/')
@@ -57,7 +61,7 @@ for inst_type in sol_file_list:
                     os.mkdir(tikz_inst_loc)
 
                 inst_split = inst.split('-')
-                instance_loc = sol_path + inst_type + '/' + i + '.txt'            
+                instance_loc = sol_path + inst_type + '/' + inst + '.txt'            
                 if(int(inst_split[-1][1:]) == num):
                     alpha = '2'
                     if(inst_split[1][:-2] == 'alpha'):
@@ -96,12 +100,14 @@ for inst_type in sol_file_list:
                                 if not os.path.exists(tikz_seed_loc):
                                     os.mkdir(tikz_seed_loc)
 
-                                seed_folder = runtime_folder + '/' + s
+                                seedfolder = runtime_folder + '/' + s
                                     
-                                sol2tikz(seed_folder, tikz_seed_loc+'path.tex', instance_loc)
-
-                                sfile = open(seed_folder, 'r')
+                                sol2tikz(seedfolder, tikz_seed_loc+'path.tex', instance_loc)
+                                sfile = open(seedfolder, 'r')
                                 lines = sfile.readlines()
+                                init_avaliador(instance_loc, seedfolder)
+
+
                                 best_fitness += float(lines[-15].split()[-1])
                                 current_iteration += float(lines[-14].split()[-1])
                                 last_update_iteration += float(lines[-13].split()[-1])
