@@ -413,7 +413,6 @@ int main(int argc, char* argv[]) {
         << "\nInstance: "<< argv[4]
         << final_status
         << endl;
-
     }
     catch(exception& e) {
         cerr

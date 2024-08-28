@@ -1,0 +1,15 @@
+intance location: ../../../tspd_instances/singlecenter/singlecenter-alpha_3-49-n9.txt
+
+solution location: ../../../fstsp_sol_test/singlecenter/singlecenter-alpha_3-49-n9/def_initPop/60/2700001.sol
+TSP tour:
+0 4 8 1 7 3 2 6 5 
+Operations:
+0,4,8|8,1,7|7,3,2|2,6,0|
+
+solution location: ../../../fstsp_sol_test/singlecenter/singlecenter-alpha_3-49-n9/def_initPop/60/0297720.sol
+TSP tour:
+0 1 2 8 6 3 7 4 5 
+Operations:
+0,1,2|2,8,6|6,7,4|4,5,0|
+
+../../../tspd_instances/singlecenter/singlecenter-alpha_3-49-n9.txt ../../../fstsp_sol_test/singlecenter/singlecenter-alpha_3-49-n9/def_initPop/60/2700001.sol

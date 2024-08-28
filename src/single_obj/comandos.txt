@@ -12,3 +12,5 @@
 ./main_minimal_tsp 2700001 config.conf 60 1 1 ../../tspd_instances/doublecenter/doublecenter-71-n50.txt
 
 ./main_minimal 2700001 config-basic.conf 5 1 2 ../../tspd_instances/singlecenter/singlecenter-alpha_3-49-n9.txt
+
+python3 avaliador_bouman.py ../../../tspd_instances/uniform/solutions/uniform-1-n5-DP.txt

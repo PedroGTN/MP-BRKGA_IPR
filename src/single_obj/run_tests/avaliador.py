@@ -1,6 +1,6 @@
 import math
 
-debug = 2
+debug = 0
 
 def dist(i, j, node_loc):
     ret = (node_loc[i][0] - node_loc[j][0])**2
@@ -22,6 +22,7 @@ def dist_drone(i, j, k, node_loc, alpha):
 
 def avaliar(cost, tour, drone_ops, node_locs, alpha, N, sol_loc):
     # print("solution location: " + sol_loc)
+
     if debug>1:
         print(alpha)
 
@@ -126,13 +127,16 @@ def avaliar(cost, tour, drone_ops, node_locs, alpha, N, sol_loc):
 
         total_cost += max(drone_cost, truck_cost)
 
+    if cost != -1:
+        if abs(total_cost - cost) >= 0:
+            print("DIFERENÇA DE CUSTOS MUITO ALTA")
+            print("custo total:",total_cost, "custo suprido:",cost)
+            if debug:
+                print("solution location: " + sol_loc)
+                print(alpha)
+    else:
+        print('custo não suprido, custo calculado: ', total_cost)
 
-    if abs(total_cost - cost) >= 0:
-        print("DIFERENÇA DE CUSTOS MUITO ALTA")
-        print("custo total:",total_cost, "custo suprido:",cost)
-        if debug:
-            print("solution location: " + sol_loc)
-            print(alpha)
         # input("aperte enter para continuar...")
     # else:
     #     print("Diferença aceitável")
