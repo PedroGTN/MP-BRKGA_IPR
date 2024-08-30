@@ -336,15 +336,15 @@ int main(int argc, char* argv[]) {
         for(unsigned i = 0; i < instance.getN(); ++i)
             tour[i] = make_pair(final_status.best_chromosome[i], i);
 
-        for(unsigned i = 0; i < instance.getN(); ++i)
-            cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
-        cout<<endl;
+        // for(unsigned i = 0; i < instance.getN(); ++i)
+        //     cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
+        // cout<<endl;
 
         sort(tour.begin()+1, tour.end());
 
-        for(unsigned i = 0; i < instance.getN(); ++i)
-            cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
-        cout<<endl;
+        // for(unsigned i = 0; i < instance.getN(); ++i)
+        //     cout<<"("<<tour[i].first<< ", " <<tour[i].second<<") ";
+        // cout<<endl;
 
         vector<int> permutation, predecessor;
         Digrafo graph(instance.getN());
@@ -353,16 +353,18 @@ int main(int argc, char* argv[]) {
             cout<<i.second<<" ";
             permutation.push_back(i.second);
         }
-        cout<<"permutation:\n";
-        for(int i=0; i<instance.getN(); i++)
-            cout<<permutation[i]<<" ";
         cout<<endl;
+        // cout<<"permutation:\n";
+        // for(int i=0; i<instance.getN(); i++)
+        //     cout<<permutation[i]<<" ";
+        // cout<<endl;
 
-        cout<<endl;
-        double check = decoder.split_lazy(instance, permutation);
-        cout<<"valor do best_chormossome = "<<check<<endl;
-        check = decoder.split_lazy(instance, permutation, predecessor, graph);
-        cout<<"valor do best_chormossome2 = "<<check<<endl;
+        // cout<<endl;
+        // double check = decoder.split_lazy(instance, permutation);
+        // cout<<"valor do best_chormossome = "<<check<<endl;
+        // check = decoder.split_lazy(instance, permutation, predecessor, graph);
+        // cout<<"valor do best_chormossome2 = "<<check<<endl;
+        decoder.split_lazy(instance, permutation, predecessor, graph);
 
 
         

@@ -32,9 +32,12 @@ suffix = sys.argv[2]
 instances_path = "../../../tspd_instances/"
 tsp_solutions_path = "../../../fstsp_sol_" + suffix + '/'
 # runtimes = [15, 30, 60, 120, 240]
-runtimes = [60]
+runtimes = [1]
 threads = int(sys.argv[1])
-methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
+# methods = [["no_initPop", 0], ["rand_initPop", 1], ["def_initPop", 2]]
+methods = [["def_initPop", 2]]
+# num_list = [9, 50, 75, 100]
+num_list = [9]
 
 command_list = []
 pool = Pool(processes=threads)
@@ -64,12 +67,13 @@ for t in runtimes:
         for i in instances_file_list:    
             instance_path = instances_folder_especific + i
             num_nodes = instance_path.split('-')
-            if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75) or int(num_nodes[-1][1:-4])==9:
+            # if (int(num_nodes[-1][1:-4])==100 or int(num_nodes[-1][1:-4])==50 or int(num_nodes[-1][1:-4])==75) or int(num_nodes[-1][1:-4])==9:
+            if int(num_nodes[-1][1:-4]) in num_list:
                 sol_by_inst_path = sol_by_folder_path + '/' + i[:-4]
                 if not os.path.exists(sol_by_inst_path):
                         os.mkdir(sol_by_inst_path)
                 
-                for m in methods[2:]:
+                for m in methods:
                     sol_by_method_path = sol_by_inst_path + '/' + m[0]
 
                     if not os.path.exists(sol_by_method_path):
@@ -86,20 +90,20 @@ for t in runtimes:
                         
                         solution_path = sol_by_runtime + '/' + cleanseed + ".sol"
                         
-                        realruntime = str(t) if int(num_nodes[-1][1:-4]) > 30 else '5'
+                        realruntime = str(t)
                         # print(solution_path)
                         exec_command = exec_path + " " + cleanseed + " ../config-basic.conf " + realruntime + \
                         " 1 " + str(m[1]) + " " + instance_path + " > " + solution_path# + 'rm *concorde_*'
 
                         if(not os.path.isfile(solution_path)):
                             if sGlobal._value == 0:
-                                 sleep(2)
+                                 sleep(0.1)
                                  os.system('rm *concorde_*')
                             sGlobal.acquire()
                             c = threading.Thread(target=execute, args=(exec_command,))
                             children.append(c)
                             c.start()
-                            sleep(1)
+                            sleep(0.05)
                             # command_list.append(exec_command)
                         
                         # if len(command_list) == threads:

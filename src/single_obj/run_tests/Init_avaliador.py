@@ -66,7 +66,7 @@ def init_avaliador(instance_loc, sol_loc):
 
     # input("press anything to continue...")
 
-    avaliar(best_solution, tour, drone_ops, node_loc, alpha, N, sol_loc)
+    return avaliar(best_solution, tour, drone_ops, node_loc, alpha, N, sol_loc)
 
 
 def main():

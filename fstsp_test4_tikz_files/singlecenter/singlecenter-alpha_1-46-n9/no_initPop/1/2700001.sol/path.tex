@@ -1,0 +1,28 @@
+\documentclass[crop,tikz]{standalone}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\begin{document}
+      \begin{tikzpicture}[scale=0.4,cliente/.style={draw,circle,inner sep=2pt}, deposito/.style={draw,rectangle,inner sep=2pt}]
+        \node[deposito] (0) at (13.368219729286949,11.299518438994761) {Depot};
+        \node[cliente] (7) at (4.170598087654673,9.27864472941884) {7};
+        \node[cliente] (6) at (-1.36539577557938,-12.076410075411218) {6};
+        \node[cliente] (3) at (0.05118913630789543,0.457446760271127) {3};
+        \node[cliente] (1) at (-40.707610227396714,-21.588381606372604) {1};
+        \node[cliente] (4) at (-70.64984740430569,-74.96974955395454) {4};
+        \node[cliente] (5) at (-47.93090617243735,39.439697267733145) {5};
+        \node[cliente] (2) at (-16.83634524506749,55.850098207522564) {2};
+        \node[cliente] (8) at (42.84289583592218,16.996256781429917) {8};
+        \draw (0) -- (7);
+        \draw (7) -- (3);
+        \draw (3) -- (1);
+        \draw (1) -- (5);
+        \draw (5) -- (2);
+        \draw (2) -- (8);
+        \draw (8) -- (0);
+        \draw[dashed] (0) -- (6);
+        \draw[dashed] (6) -- (1);
+        \draw[dashed] (1) -- (4);
+        \draw[dashed] (4) -- (0);
+      \end{tikzpicture}
+\end{document}

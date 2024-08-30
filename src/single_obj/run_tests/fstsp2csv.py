@@ -4,7 +4,7 @@ from sol2tikz import sol2tikz
 import sys
 from Init_avaliador import init_avaliador
 
-
+cont = 0
 #nome inst, num nodes, double/single/uniform, best_fitness, current_iteration, last_update_iteration, last_update_time, stalled_iterations, largest_iteration_offset
 
 if len(sys.argv) < 2:
@@ -105,7 +105,8 @@ for inst_type in sol_file_list:
                                 sol2tikz(seedfolder, tikz_seed_loc+'path.tex', instance_loc)
                                 sfile = open(seedfolder, 'r')
                                 lines = sfile.readlines()
-                                init_avaliador(instance_loc, seedfolder)
+                                cont += init_avaliador(instance_loc, seedfolder)
+                                    
 
 
                                 best_fitness += float(lines[-15].split()[-1])
@@ -126,6 +127,6 @@ for inst_type in sol_file_list:
         
             
 
-
+print("contador:", cont)
 print("done")
 csv_file.close()

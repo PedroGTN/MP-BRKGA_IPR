@@ -126,9 +126,10 @@ def avaliar(cost, tour, drone_ops, node_locs, alpha, N, sol_loc):
             print("dronecost|truckcost:",drone_cost,"|", truck_cost)
 
         total_cost += max(drone_cost, truck_cost)
-
+    flag = 0
     if cost != -1:
-        if abs(total_cost - cost) >= 0:
+        if abs(total_cost - cost) >= 0.01:
+            flag = 1
             print("DIFERENÇA DE CUSTOS MUITO ALTA")
             print("custo total:",total_cost, "custo suprido:",cost)
             if debug:
@@ -140,6 +141,6 @@ def avaliar(cost, tour, drone_ops, node_locs, alpha, N, sol_loc):
         # input("aperte enter para continuar...")
     # else:
     #     print("Diferença aceitável")
-
+    return flag
     
 
